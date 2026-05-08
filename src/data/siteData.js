@@ -11,7 +11,7 @@ export const defaultProfile = {
   whatsappNumber: "5544999844607",
   whatsappMessage:
     "Olá! Vim pelo Instagram e gostaria de agendar uma consulta odontológica homecare.",
-  instagramUrl: "https://www.instagram.com/pattycraveiro/",
+  instagramUrl: "https://www.instagram.com/dra.patriciacraveiro/",
   email: "",
   coverImage: "/assets/homecare-dental.png",
 };
