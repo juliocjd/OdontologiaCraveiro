@@ -4,13 +4,13 @@ export const defaultProfile = {
   credential: "Cirurgiã-dentista | CRO/PR 40021",
   brandMarkText: "OC",
   brandMarkImage: "/assets/logo-icon.png",
-  headline: "Homecare odontológico",
+  headline: "Homecare odontológico em Maringá e Região",
   intro:
-    "Cuidado individualizado para quem prefere ou precisa receber atendimento odontológico em casa, no hospital ou em instituições de cuidado.",
-  serviceArea: "Atendimentos mediante agendamento",
+    "Cuidado individualizado para quem prefere ou precisa receber atendimento odontológico em casa, no hospital ou em instituições de cuidado em Maringá e Região.",
+  serviceArea: "Atendimento odontológico homecare em Maringá e Região",
   whatsappNumber: "5544999844607",
   whatsappMessage:
-    "Olá! Vim pelo Instagram e gostaria de agendar uma consulta odontológica homecare.",
+    "Olá! Vim pelo site e gostaria de agendar uma consulta odontológica homecare em Maringá e Região.",
   instagramUrl: "https://www.instagram.com/dra.patriciacraveiro/",
   email: "",
   coverImage: "/assets/homecare-dental.png",
@@ -19,7 +19,7 @@ export const defaultProfile = {
 export const defaultButtons = [
   {
     id: "agendar-whatsapp",
-    label: "Agende sua consulta aqui",
+    label: "Agende sua consulta",
     type: "whatsapp",
     icon: "message",
     url: "",

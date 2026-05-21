@@ -17,7 +17,6 @@ import {
   Link as LinkIcon,
   Mail,
   MapPin,
-  MessageCircle,
   Phone,
   Plus,
   RefreshCw,
@@ -40,6 +39,27 @@ import {
   saveSiteConfig,
 } from "./lib/siteConfig.js";
 
+function WhatsAppIcon({ size = 24, ...props }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M12.04 2.25a9.56 9.56 0 0 0-8.18 14.5L2.75 21.7l5.08-1.07A9.56 9.56 0 1 0 12.04 2.25Zm0 1.78a7.78 7.78 0 1 1 0 15.56 7.7 7.7 0 0 1-3.66-.92l-.29-.15-2.96.62.64-2.85-.18-.3a7.78 7.78 0 0 1 6.45-11.96Z"
+      />
+      <path
+        fill="currentColor"
+        d="M9.44 7.78c-.18-.4-.37-.41-.54-.42h-.46c-.16 0-.41.06-.63.29-.21.24-.82.8-.82 1.96 0 1.15.84 2.27.96 2.42.12.16 1.62 2.59 4.01 3.53 1.98.78 2.39.62 2.82.58.43-.04 1.4-.57 1.6-1.13.2-.55.2-1.03.14-1.13-.06-.1-.22-.16-.46-.28l-1.36-.67c-.2-.1-.35-.16-.5.08-.15.23-.57.74-.7.9-.13.16-.26.18-.49.06-.24-.12-1-.37-1.9-1.18-.7-.62-1.17-1.39-1.31-1.63-.14-.23-.01-.36.1-.48.11-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.15.04-.29-.02-.41l-.62-1.5Z"
+      />
+    </svg>
+  );
+}
+
 const iconMap = {
   baby: Baby,
   calendar: CalendarCheck,
@@ -53,7 +73,7 @@ const iconMap = {
   link: LinkIcon,
   mail: Mail,
   map: MapPin,
-  message: MessageCircle,
+  message: WhatsAppIcon,
   phone: Phone,
   shield: ShieldCheck,
   user: UserRound,
@@ -114,6 +134,11 @@ function PublicPage({ config, isPreview = false }) {
     () => buttons.filter((button) => button.active),
     [buttons],
   );
+  const marqueeItems = [
+    "Atendimento Especializado e Humanizado",
+    "Dentista em Casa",
+    "Maringá e Região",
+  ];
 
   const sharePage = async () => {
     const shareData = {
@@ -133,7 +158,24 @@ function PublicPage({ config, isPreview = false }) {
   return (
     <main className={isPreview ? "site-page preview-page" : "site-page"}>
       <div className="page-background" />
-      <section className="link-shell" aria-label="Página de links">
+      <section
+        className="link-shell"
+        aria-label="Página de atendimento homecare"
+      >
+        <div
+          className="top-marquee"
+          aria-label="Atendimento Especializado e Humanizado, Dentista em Casa, Maringá e Região"
+        >
+          <div className="top-marquee-track" aria-hidden="true">
+            {[...marqueeItems, ...marqueeItems, ...marqueeItems].map(
+              (item, index) => (
+                <span className="top-marquee-item" key={`${item}-${index}`}>
+                  {item}
+                </span>
+              ),
+            )}
+          </div>
+        </div>
         <header className="hero">
           <img
             className="hero-image"
@@ -141,6 +183,12 @@ function PublicPage({ config, isPreview = false }) {
             alt="Kit odontológico preparado para atendimento domiciliar"
           />
           <div className="hero-scrim" />
+          <div className="hero-logo">
+            <BrandMark
+              profile={profile}
+              onOpenLogo={() => setIsLogoModalOpen(true)}
+            />
+          </div>
           <div className="hero-actions" aria-label="Ações rápidas">
             <a
               className="icon-button"
@@ -149,7 +197,7 @@ function PublicPage({ config, isPreview = false }) {
               target="_blank"
               rel="noreferrer"
             >
-              <MessageCircle aria-hidden="true" size={19} />
+              <WhatsAppIcon aria-hidden="true" size={20} />
             </a>
             <button
               className="icon-button"
@@ -162,50 +210,99 @@ function PublicPage({ config, isPreview = false }) {
           </div>
 
           <div className="brand-panel">
-            <BrandMark
-              profile={profile}
-              onOpenLogo={() => setIsLogoModalOpen(true)}
-            />
             <p className="eyebrow">{profile.headline}</p>
+            <h1>Atendimento odontológico domiciliar e hospitalar</h1>
+            <p className="hero-lede">{profile.intro}</p>
+            <div className="hero-cta">
+              <a
+                className="primary-button"
+                href={buildWhatsAppLink(profile)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <WhatsAppIcon aria-hidden="true" size={19} />
+                FALAR NO WHATSAPP AGORA
+              </a>
+              <a className="ghost-button hero-secondary" href="#homecare">
+                Como funciona
+              </a>
+            </div>
             <p className="professional">{profile.professionalName}</p>
             <p className="credential">{profile.credential}</p>
           </div>
         </header>
 
-        <section className="intro-block">
-          <p>{profile.intro}</p>
-        </section>
+        <div className="page-content">
+          <aside className="contact-panel" aria-label="Canais de atendimento">
+            <p className="eyebrow">Agendamento</p>
+            <h2>Fale com a Dra. Patrícia</h2>
+            <nav className="link-list" aria-label="Links principais">
+              {activeButtons.map((button) => (
+                <ActionButton
+                  key={button.id}
+                  button={button}
+                  profile={profile}
+                />
+              ))}
+            </nav>
+          </aside>
 
-        <nav className="link-list" aria-label="Links principais">
-          {activeButtons.map((button) => (
-            <ActionButton key={button.id} button={button} profile={profile} />
-          ))}
-        </nav>
+          <div className="content-flow">
+            <section className="intro-block">
+              <p>
+                Atendimento pensado para pacientes que precisam de uma consulta
+                odontológica sem deslocamento, com avaliação individualizada e
+                orientação clara para a família ou equipe de cuidado.
+              </p>
+            </section>
 
-        <section className="info-section" id="homecare">
-          <div className="section-heading">
-            <Home aria-hidden="true" size={20} />
-            <h2>Homecare em destaque</h2>
-          </div>
-          <p>
-            O atendimento vai até o paciente com planejamento, biossegurança e
-            foco em conforto. É uma alternativa para avaliação, prevenção,
-            acompanhamento e cuidados odontológicos individualizados.
-          </p>
-        </section>
+            <section className="info-section" id="homecare">
+              <div className="section-heading">
+                <Home aria-hidden="true" size={20} />
+                <h2>Como funciona o homecare</h2>
+              </div>
+              <p>
+                O atendimento vai até o paciente com planejamento, biossegurança
+                e foco em conforto. É uma alternativa para avaliação, prevenção,
+                acompanhamento e cuidados odontológicos individualizados.
+              </p>
+              <div className="feature-grid">
+                <PatientItem icon="calendar" label="Agendamento direto" />
+                <PatientItem icon="shield" label="Materiais organizados" />
+                <PatientItem icon="home" label="Cuidado no domicílio" />
+                <PatientItem icon="check" label="Plano de cuidado" />
+              </div>
+            </section>
 
-        <section className="info-section" id="pacientes">
-          <div className="section-heading">
-            <HeartPulse aria-hidden="true" size={20} />
-            <h2>Quem pode receber atendimento</h2>
+            <section className="info-section" id="hospitalar">
+              <div className="section-heading">
+                <Hospital aria-hidden="true" size={20} />
+                <h2>Atendimento hospitalar</h2>
+              </div>
+              <p>
+                A avaliação odontológica também pode ser organizada em ambiente
+                hospitalar ou instituições de cuidado, respeitando as rotinas do
+                local e as necessidades clínicas de cada paciente.
+              </p>
+            </section>
+
+            <section className="info-section" id="pacientes">
+              <div className="section-heading">
+                <HeartPulse aria-hidden="true" size={20} />
+                <h2>Para quem é indicado</h2>
+              </div>
+              <div className="patient-grid">
+                <PatientItem icon="user" label="Idosos" />
+                <PatientItem
+                  icon="wheelchair"
+                  label="Dificuldade de locomoção"
+                />
+                <PatientItem icon="heart" label="Pacientes acamados" />
+                <PatientItem icon="baby" label="Crianças" />
+              </div>
+            </section>
           </div>
-          <div className="patient-grid">
-            <PatientItem icon="user" label="Idosos" />
-            <PatientItem icon="wheelchair" label="Dificuldade de locomoção" />
-            <PatientItem icon="heart" label="Pacientes acamados" />
-            <PatientItem icon="baby" label="Crianças" />
-          </div>
-        </section>
+        </div>
 
         <footer className="footer">
           <span>{profile.serviceArea}</span>
@@ -291,11 +388,7 @@ function LogoModal({ imageSrc, brandName, isOpen, onClose }) {
   if (!isOpen || !logoImage) return null;
 
   return (
-    <div
-      className="logo-modal-backdrop"
-      role="presentation"
-      onClick={onClose}
-    >
+    <div className="logo-modal-backdrop" role="presentation" onClick={onClose}>
       <div
         className="logo-modal"
         role="dialog"
