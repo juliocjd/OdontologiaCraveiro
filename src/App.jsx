@@ -191,6 +191,7 @@ function PublicPage({ config, isPreview = false }) {
               profile={profile}
               onOpenLogo={() => setIsLogoModalOpen(true)}
             />
+            <p className="eyebrow">{profile.headline}</p>
           </div>
           <div className="hero-actions" aria-label="Ações rápidas">
             <a
@@ -213,7 +214,6 @@ function PublicPage({ config, isPreview = false }) {
           </div>
 
           <div className="brand-panel">
-            <p className="eyebrow">{profile.headline}</p>
             <h1>Atendimento odontológico domiciliar e hospitalar</h1>
             <p className="hero-lede">{profile.intro}</p>
             <div className="hero-cta">

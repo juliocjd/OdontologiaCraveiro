@@ -167,10 +167,21 @@ a {
   position: absolute;
   top: 24px;
   left: 24px;
+  max-width: calc(100% - 150px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .hero-logo .brand-mark {
+  flex: 0 0 auto;
   margin-bottom: 0;
+}
+
+.hero-logo .eyebrow {
+  margin: 0;
+  color: #f0c4b8;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.28);
 }
 
 .icon-button,
@@ -224,11 +235,11 @@ a {
 }
 
 .brand-mark.image-mark {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   padding: 0;
   border: 0;
-  border-radius: 16px;
+  border-radius: 14px;
   background: #fffdf8;
   cursor: zoom-in;
   transition: transform 160ms ease;
@@ -266,10 +277,6 @@ a {
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
-}
-
-.brand-panel .eyebrow {
-  color: #f0c4b8;
 }
 
 .brand-panel h1,
@@ -971,10 +978,21 @@ a {
     right: 16px;
   }
 
+  .hero-logo {
+    top: 16px;
+    left: 18px;
+    right: auto;
+    max-width: 54px;
+  }
+
   .brand-mark.image-mark {
     width: 54px;
     height: 54px;
     border-radius: 14px;
+  }
+
+  .hero-logo .eyebrow {
+    display: none;
   }
 
   .brand-panel h1 {
