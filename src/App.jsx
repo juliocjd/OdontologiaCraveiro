@@ -80,7 +80,10 @@ const iconMap = {
   wheelchair: Accessibility,
 };
 
-const canUseAdmin = import.meta.env.DEV;
+const canUseAdmin =
+  import.meta.env.DEV &&
+  typeof window !== "undefined" &&
+  ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 
 function App() {
   const [config, setConfig] = useState(() => loadSiteConfig());
@@ -136,7 +139,7 @@ function PublicPage({ config, isPreview = false }) {
   );
   const marqueeItems = [
     "Atendimento Especializado e Humanizado",
-    "Dentista em Casa",
+    "Dentista em Casa e Hospitalar",
     "Maringá e Região",
   ];
 
@@ -306,7 +309,6 @@ function PublicPage({ config, isPreview = false }) {
 
         <footer className="footer">
           <span>{profile.serviceArea}</span>
-          {canUseAdmin ? <a href="#admin">Editar página</a> : null}
         </footer>
       </section>
 
