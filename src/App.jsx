@@ -259,6 +259,19 @@ function PublicPage({ config, isPreview = false }) {
               </p>
             </section>
 
+            <section className="info-section video-section" aria-labelledby="video-title">
+              <div className="section-heading">
+                <Camera aria-hidden="true" size={20} />
+                <h2 id="video-title">Conheça o atendimento</h2>
+              </div>
+              <div className="video-frame">
+                <video controls preload="metadata" playsInline>
+                  <source src="/assets/video.mp4" type="video/mp4" />
+                  Seu navegador não suporta a reprodução deste vídeo.
+                </video>
+              </div>
+            </section>
+
             <section className="info-section" id="homecare">
               <div className="section-heading">
                 <Home aria-hidden="true" size={20} />
