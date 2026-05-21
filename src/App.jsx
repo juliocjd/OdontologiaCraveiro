@@ -259,48 +259,54 @@ function PublicPage({ config, isPreview = false }) {
               </p>
             </section>
 
-            <section className="info-section video-section" aria-labelledby="video-title">
-              <div className="section-heading">
-                <Camera aria-hidden="true" size={20} />
-                <h2 id="video-title">Conheça o atendimento</h2>
-              </div>
-              <div className="video-frame">
-                <video controls preload="metadata" playsInline>
-                  <source src="/assets/video.mp4" type="video/mp4" />
-                  Seu navegador não suporta a reprodução deste vídeo.
-                </video>
-              </div>
-            </section>
+            <div className="desktop-feature-row">
+              <section className="info-section video-section" aria-labelledby="video-title">
+                <div className="section-heading">
+                  <Camera aria-hidden="true" size={20} />
+                  <h2 id="video-title">Conheça o atendimento</h2>
+                </div>
+                <div className="video-frame">
+                  <video controls preload="metadata" playsInline>
+                    <source src="/assets/video.mp4" type="video/mp4" />
+                    Seu navegador não suporta a reprodução deste vídeo.
+                  </video>
+                </div>
+              </section>
 
-            <section className="info-section" id="homecare">
-              <div className="section-heading">
-                <Home aria-hidden="true" size={20} />
-                <h2>Como funciona o homecare</h2>
-              </div>
-              <p>
-                O atendimento vai até o paciente com planejamento, biossegurança
-                e foco em conforto. É uma alternativa para avaliação, prevenção,
-                acompanhamento e cuidados odontológicos individualizados.
-              </p>
-              <div className="feature-grid">
-                <PatientItem icon="calendar" label="Agendamento direto" />
-                <PatientItem icon="shield" label="Materiais organizados" />
-                <PatientItem icon="home" label="Cuidado no domicílio" />
-                <PatientItem icon="check" label="Plano de cuidado" />
-              </div>
-            </section>
+              <div className="desktop-feature-stack">
+                <section className="info-section" id="homecare">
+                  <div className="section-heading">
+                    <Home aria-hidden="true" size={20} />
+                    <h2>Como funciona o homecare</h2>
+                  </div>
+                  <p>
+                    O atendimento vai até o paciente com planejamento,
+                    biossegurança e foco em conforto. É uma alternativa para
+                    avaliação, prevenção, acompanhamento e cuidados
+                    odontológicos individualizados.
+                  </p>
+                  <div className="feature-grid">
+                    <PatientItem icon="calendar" label="Agendamento direto" />
+                    <PatientItem icon="shield" label="Materiais organizados" />
+                    <PatientItem icon="home" label="Cuidado no domicílio" />
+                    <PatientItem icon="check" label="Plano de cuidado" />
+                  </div>
+                </section>
 
-            <section className="info-section" id="hospitalar">
-              <div className="section-heading">
-                <Hospital aria-hidden="true" size={20} />
-                <h2>Atendimento hospitalar</h2>
+                <section className="info-section" id="hospitalar">
+                  <div className="section-heading">
+                    <Hospital aria-hidden="true" size={20} />
+                    <h2>Atendimento hospitalar</h2>
+                  </div>
+                  <p>
+                    A avaliação odontológica também pode ser organizada em
+                    ambiente hospitalar ou instituições de cuidado, respeitando
+                    as rotinas do local e as necessidades clínicas de cada
+                    paciente.
+                  </p>
+                </section>
               </div>
-              <p>
-                A avaliação odontológica também pode ser organizada em ambiente
-                hospitalar ou instituições de cuidado, respeitando as rotinas do
-                local e as necessidades clínicas de cada paciente.
-              </p>
-            </section>
+            </div>
 
             <section className="info-section" id="pacientes">
               <div className="section-heading">
