@@ -5,10 +5,10 @@
       "has": [
         {
           "type": "host",
-          "value": "odontoemcasa.com.br"
+          "value": "www.odontoemcasa.com.br"
         }
       ],
-      "destination": "https://www.odontoemcasa.com.br/$1",
+      "destination": "https://odontoemcasa.com.br/$1",
       "permanent": true
     }
   ],
@@ -32,6 +32,22 @@
     { "source": "/sobre", "destination": "/index.html" },
     { "source": "/sobre/", "destination": "/index.html" },
     { "source": "/faq", "destination": "/index.html" },
-    { "source": "/faq/", "destination": "/index.html" }
+    { "source": "/faq/", "destination": "/index.html" },
+    { "source": "/limpeza-dentaria-em-casa", "destination": "/index.html" },
+    { "source": "/limpeza-dentaria-em-casa/", "destination": "/index.html" },
+    { "source": "/higiene-bucal-para-acamados", "destination": "/index.html" },
+    { "source": "/higiene-bucal-para-acamados/", "destination": "/index.html" },
+    { "source": "/protese-dentaria-em-casa", "destination": "/index.html" },
+    { "source": "/protese-dentaria-em-casa/", "destination": "/index.html" },
+    { "source": "/dor-de-dente-em-casa", "destination": "/index.html" },
+    { "source": "/dor-de-dente-em-casa/", "destination": "/index.html" },
+    { "source": "/tratamento-de-carie-em-casa", "destination": "/index.html" },
+    { "source": "/tratamento-de-carie-em-casa/", "destination": "/index.html" },
+    { "source": "/tratamento-de-gengiva-em-casa", "destination": "/index.html" },
+    { "source": "/tratamento-de-gengiva-em-casa/", "destination": "/index.html" },
+    { "source": "/dentista-para-paciente-em-home-care", "destination": "/index.html" },
+    { "source": "/dentista-para-paciente-em-home-care/", "destination": "/index.html" },
+    { "source": "/dentista-para-paciente-com-alzheimer-e-demencia", "destination": "/index.html" },
+    { "source": "/dentista-para-paciente-com-alzheimer-e-demencia/", "destination": "/index.html" }
   ]
 }

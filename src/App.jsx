@@ -12,9 +12,12 @@ import {
 import {
   cities,
   faqItems,
+  homeServiceLinks,
   navItems,
   pages,
   serviceCards,
+  serviceDetailPages,
+  serviceGroups,
   site,
   whatsappMessages,
 } from "./data/siteData.js";
@@ -200,6 +203,27 @@ function HomePage({ page }) {
         />
       </section>
 
+      <section className="home-services" aria-labelledby="home-services-title">
+        <div className="home-services-heading">
+          <p className="eyebrow">Serviços odontológicos em casa</p>
+          <h2 id="home-services-title">
+            Buscas comuns de quem precisa de dentista domiciliar
+          </h2>
+          <p>
+            Alguns cuidados podem ser avaliados no próprio domicílio em Maringá
+            e região, sempre conforme condição clínica do paciente, segurança do
+            caso e viabilidade técnica.
+          </p>
+        </div>
+        <div className="home-service-links">
+          {homeServiceLinks.map((item) => (
+            <a key={item.path} href={item.path}>
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </section>
+
       <CtaBand
         title="Precisa de atendimento odontológico domiciliar em Maringá?"
         text="Conte pelo WhatsApp quem precisa do atendimento, a cidade, a principal queixa e se há dificuldade de locomoção ou internação."
@@ -211,23 +235,9 @@ function HomePage({ page }) {
 }
 
 function ServicesPage({ page }) {
-  const serviceGroups = [
-    {
-      title: "Avaliação e atendimento",
-      text: "Para entender a necessidade inicial, definir limites técnicos e organizar o cuidado no local mais adequado.",
-      services: serviceCards.slice(0, 3),
-    },
-    {
-      title: "Pacientes e famílias",
-      text: "Atendimento para pessoas que precisam de cuidado odontológico com menor deslocamento e orientação próxima da família.",
-      services: serviceCards.slice(3, 10),
-    },
-    {
-      title: "Cuidadores, instituições e escolas",
-      text: "Orientação prática para rotinas de higiene oral, prevenção e educação em saúde bucal.",
-      services: serviceCards.slice(10),
-    },
-  ];
+  const serviceByKey = new Map(
+    serviceCards.map((service) => [service.key, service]),
+  );
 
   return (
     <ContentPage page={page}>
@@ -256,12 +266,15 @@ function ServicesPage({ page }) {
               <p>{group.text}</p>
             </div>
             <div className="service-list">
-              {group.services.map((service) => (
-                <article className="service-card" key={service.title}>
-                  <h3>{service.title}</h3>
-                  <p>{service.text}</p>
-                </article>
-              ))}
+              {group.serviceKeys
+                .map((key) => serviceByKey.get(key))
+                .filter(Boolean)
+                .map((service) => (
+                  <article className="service-card" key={service.key}>
+                    <h3>{service.title}</h3>
+                    <p>{service.text}</p>
+                  </article>
+                ))}
             </div>
           </section>
         ))}
@@ -358,7 +371,8 @@ function ElderlyPage({ page }) {
         ))}
       </div>
       <p>
-        Esses sinais não substituem consulta e não permitem diagnóstico online.
+        Esses sinais não substituem consulta e não permitem conclusão clínica à
+        distância.
         A conduta depende da avaliação presencial, histórico de saúde, ambiente
         e viabilidade técnica.
       </p>
@@ -521,7 +535,7 @@ function AboutPage({ page }) {
           <p>
             Quando aplicável, a atuação também inclui atendimento odontológico
             infantil e ações educativas em saúde bucal para crianças. Não há
-            promessa de resultado, diagnóstico online ou atendimento em todos os
+            promessa de resultado, conclusão clínica à distância ou atendimento em todos os
             casos sem avaliação.
           </p>
         </div>
@@ -544,6 +558,37 @@ function FaqPage({ page }) {
           </details>
         ))}
       </div>
+    </ContentPage>
+  );
+}
+
+function ServiceTopicPage({ page, path }) {
+  const detail = serviceDetailPages[path];
+  const messageKey = detail?.messageKey || page.message || "default";
+
+  return (
+    <ContentPage page={page}>
+      <p>{detail.intro}</p>
+      <div className="topic-layout">
+        <section className="topic-panel">
+          <h2>Para quem é indicado</h2>
+          <InfoList items={detail.indicatedFor} />
+        </section>
+        <section className="topic-panel">
+          <h2>Quando o atendimento em casa pode ajudar</h2>
+          <p>{detail.homeHelp}</p>
+        </section>
+        <section className="topic-panel">
+          <h2>Avaliação e segurança do caso</h2>
+          <p>{detail.safety}</p>
+        </section>
+      </div>
+      <CtaBand
+        title={detail.cta}
+        text="Envie pelo WhatsApp a cidade, idade do paciente, principal queixa, condição de locomoção e se há cuidador ou equipe acompanhando."
+        messageKey={messageKey}
+        location={`service_${path.replaceAll("/", "").replaceAll("-", "_")}`}
+      />
     </ContentPage>
   );
 }
@@ -740,6 +785,10 @@ function JsonLd({ data }) {
 }
 
 function renderRoute(path, page) {
+  if (serviceDetailPages[path]) {
+    return <ServiceTopicPage page={page} path={path} />;
+  }
+
   switch (path) {
     case "/":
       return <HomePage page={page} />;

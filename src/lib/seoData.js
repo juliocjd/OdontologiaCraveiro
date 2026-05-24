@@ -49,8 +49,23 @@ export function buildJsonLd(path, page, isNotFound = false) {
       })),
     },
   };
+  const dentist = {
+    "@type": "Dentist",
+    "@id": `${site.canonicalOrigin}/#dentist`,
+    name: site.brandName,
+    url: `${site.canonicalOrigin}/`,
+    image: site.ogImage,
+    logo: site.logo,
+    telephone: `+${site.whatsappNumber}`,
+    areaServed: cities.map((city) => ({ "@type": "City", name: city })),
+    parentOrganization: { "@id": `${site.canonicalOrigin}/#organization` },
+    employee: { "@id": `${site.canonicalOrigin}/#dra-patricia-craveiro` },
+    sameAs: [site.instagramUrl],
+    description:
+      "Dentista domiciliar e hospitalar em Maringá e região, com atendimento mediante avaliação, condição clínica do paciente e viabilidade técnica do caso.",
+  };
 
-  const graph = [organization, person, service];
+  const graph = [organization, dentist, person, service];
 
   if (path !== "/" || isNotFound) {
     graph.push({
