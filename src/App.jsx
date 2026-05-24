@@ -1,845 +1,829 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowUp,
-  Accessibility,
-  Baby,
-  CalendarCheck,
-  Camera,
-  Check,
-  ChevronRight,
-  Copy,
-  ExternalLink,
-  HeartPulse,
+  CheckCircle2,
+  ChevronDown,
   Home,
   Hospital,
-  Link as LinkIcon,
-  Mail,
-  MapPin,
-  Phone,
-  Plus,
-  RefreshCw,
-  Save,
-  ShieldCheck,
-  Trash2,
-  Upload,
-  UserRound,
+  Menu,
+  MessageCircle,
+  Users,
   X,
 } from "lucide-react";
 import {
-  buildWhatsAppLink,
-  cloneDefaultConfig,
-  isExternalHref,
-  loadSiteConfig,
-  mergeConfig,
-  normalizeButton,
-  resetSiteConfig,
-  resolveButtonHref,
-  saveSiteConfig,
-} from "./lib/siteConfig.js";
+  cities,
+  faqItems,
+  navItems,
+  pages,
+  serviceCards,
+  site,
+  whatsappMessages,
+} from "./data/siteData.js";
+import { buildJsonLd } from "./lib/seoData.js";
 
-function WhatsAppIcon({ size = 24, ...props }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        fill="currentColor"
-        d="M12.04 2.25a9.56 9.56 0 0 0-8.18 14.5L2.75 21.7l5.08-1.07A9.56 9.56 0 1 0 12.04 2.25Zm0 1.78a7.78 7.78 0 1 1 0 15.56 7.7 7.7 0 0 1-3.66-.92l-.29-.15-2.96.62.64-2.85-.18-.3a7.78 7.78 0 0 1 6.45-11.96Z"
-      />
-      <path
-        fill="currentColor"
-        d="M9.44 7.78c-.18-.4-.37-.41-.54-.42h-.46c-.16 0-.41.06-.63.29-.21.24-.82.8-.82 1.96 0 1.15.84 2.27.96 2.42.12.16 1.62 2.59 4.01 3.53 1.98.78 2.39.62 2.82.58.43-.04 1.4-.57 1.6-1.13.2-.55.2-1.03.14-1.13-.06-.1-.22-.16-.46-.28l-1.36-.67c-.2-.1-.35-.16-.5.08-.15.23-.57.74-.7.9-.13.16-.26.18-.49.06-.24-.12-1-.37-1.9-1.18-.7-.62-1.17-1.39-1.31-1.63-.14-.23-.01-.36.1-.48.11-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.15.04-.29-.02-.41l-.62-1.5Z"
-      />
-    </svg>
-  );
-}
-
-const iconMap = {
-  baby: Baby,
-  calendar: CalendarCheck,
-  check: Check,
-  external: ExternalLink,
-  heart: HeartPulse,
-  home: Home,
-  hospital: Hospital,
-  accessibility: Accessibility,
-  instagram: Camera,
-  link: LinkIcon,
-  mail: Mail,
-  map: MapPin,
-  message: WhatsAppIcon,
-  phone: Phone,
-  shield: ShieldCheck,
-  user: UserRound,
-  wheelchair: Accessibility,
-};
-
-const canUseAdmin =
-  import.meta.env.DEV &&
-  typeof window !== "undefined" &&
-  ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+const routeOrder = Object.keys(pages).filter((path) => path !== "/404/");
 
 function App() {
-  const [config, setConfig] = useState(() => loadSiteConfig());
-  const [mode, setMode] = useState(() =>
-    window.location.hash === "#admin" && canUseAdmin ? "admin" : "public",
+  const [path, setPath] = useState(() =>
+    normalizePath(window.location.pathname),
   );
 
   useEffect(() => {
-    const handleHash = () => {
-      const nextMode =
-        window.location.hash === "#admin" && canUseAdmin ? "admin" : "public";
-
-      if (window.location.hash === "#admin" && !canUseAdmin) {
-        window.history.replaceState(null, "", window.location.pathname);
-      }
-
-      setMode(nextMode);
-    };
-
-    window.addEventListener("hashchange", handleHash);
-    return () => window.removeEventListener("hashchange", handleHash);
+    const handlePopState = () =>
+      setPath(normalizePath(window.location.pathname));
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  const persistConfig = (nextConfig) => {
-    const normalized = mergeConfig(nextConfig);
-    setConfig(normalized);
-    saveSiteConfig(normalized);
-  };
+  const pagePath = pages[path] ? path : "/404/";
+  const page = pages[pagePath];
+  const isNotFound = pagePath === "/404/";
 
-  if (mode === "admin" && canUseAdmin) {
-    return (
-      <AdminPanel
-        config={config}
-        onSave={persistConfig}
-        onReset={() => {
-          const next = resetSiteConfig();
-          setConfig(next);
-          return next;
-        }}
-      />
-    );
-  }
+  useEffect(() => {
+    applySeo(page, pagePath, isNotFound);
+  }, [page, pagePath, isNotFound]);
 
-  return <PublicPage config={config} />;
+  return (
+    <SiteLayout currentPath={pagePath}>
+      <JsonLd data={buildJsonLd(pagePath, page, isNotFound)} />
+      {renderRoute(pagePath, page)}
+    </SiteLayout>
+  );
 }
 
-function PublicPage({ config, isPreview = false }) {
-  const { profile, buttons } = config;
-  const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
-  const activeButtons = useMemo(
-    () => buttons.filter((button) => button.active),
-    [buttons],
+function SiteLayout({ currentPath, children }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [currentPath]);
+
+  return (
+    <>
+      <header className="site-header">
+        <a className="brand-link" href="/" aria-label="Odonto em Casa">
+          <img
+            src="/assets/logo-icon.png"
+            width="44"
+            height="44"
+            alt=""
+            decoding="async"
+          />
+          <span>
+            <strong>Odonto em Casa</strong>
+            <small>Dentista domiciliar em Maringá</small>
+          </span>
+        </a>
+        <button
+          className="menu-toggle"
+          type="button"
+          aria-label="Abrir menu"
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((value) => !value)}
+        >
+          {isMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+        </button>
+        <nav
+          className={isMenuOpen ? "main-nav is-open" : "main-nav"}
+          aria-label="Menu principal"
+        >
+          {navItems.map((item) => (
+            <a
+              key={item.path}
+              href={item.path}
+              aria-current={currentPath === item.path ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+          <WhatsAppLink
+            className="nav-whatsapp"
+            location="main_nav"
+            label="whatsapp_menu"
+          >
+            WhatsApp
+          </WhatsAppLink>
+        </nav>
+      </header>
+      <main>{children}</main>
+      <Footer />
+      <WhatsAppLink
+        className="floating-whatsapp"
+        location="mobile_fixed"
+        label="whatsapp_mobile_fixed"
+      >
+        <MessageCircle aria-hidden="true" size={20} />
+        <span>Agendar avaliação pelo WhatsApp</span>
+      </WhatsAppLink>
+    </>
   );
-  const marqueeItems = [
-    "Atendimento Especializado e Humanizado",
-    "Dentista em Casa e Hospitalar",
-    "Maringá e Região",
+}
+
+function HomePage({ page }) {
+  return (
+    <>
+      <section className="hero" aria-labelledby="home-title">
+        <img
+          className="hero-image"
+          src={site.coverImage}
+          width="1600"
+          height="1067"
+          alt="Dentista domiciliar em Maringá"
+          fetchPriority="high"
+          decoding="async"
+        />
+        <div className="hero-overlay" />
+        <div className="hero-content">
+          <p className="eyebrow">Odonto em Casa | Maringá e região</p>
+          <h1 id="home-title">{page.h1}</h1>
+          <p className="hero-lede">
+            Cuidado odontológico humanizado em casa, hospitais e instituições
+            para idosos, pacientes acamados, pessoas com dificuldade de
+            locomoção, pessoas com necessidades especiais e crianças.
+          </p>
+          <div className="button-row">
+            <WhatsAppLink
+              className="primary-button"
+              messageKey="home"
+              location="home_hero"
+              label="whatsapp_home_hero"
+            >
+              <MessageCircle aria-hidden="true" size={20} />
+              Agendar avaliação pelo WhatsApp
+            </WhatsAppLink>
+            <a
+              className="secondary-button hero-secondary"
+              href="/atendimento-domiciliar/"
+            >
+              Entender como funciona
+            </a>
+          </div>
+          <p className="technical-note">
+            Sob responsabilidade técnica da {site.professionalDisplayName},{" "}
+            {site.credential}.
+          </p>
+        </div>
+      </section>
+
+      <section className="intro-band">
+        <div>
+          <p className="eyebrow">Atendimento no local do paciente</p>
+          <h2>Odontologia domiciliar com avaliação individualizada</h2>
+        </div>
+        <p>
+          A Odonto em Casa oferece atendimento odontológico domiciliar e
+          hospitalar em Maringá e região, sob responsabilidade técnica da
+          {` ${site.professionalDisplayName}, ${site.credential}`}. O cuidado é
+          indicado para famílias, cuidadores, casas de repouso, instituições de
+          longa permanência, home cares e pacientes que precisam de um dentista
+          em casa.
+        </p>
+      </section>
+
+      <section className="section-grid">
+        <FeatureCard
+          icon={<Home />}
+          title="Dentista em casa"
+          text="Consulta em domicílio para idosos, pacientes acamados, crianças, pessoas com dificuldade de locomoção e pessoas com necessidades especiais."
+          href="/atendimento-domiciliar/"
+        />
+        <FeatureCard
+          icon={<Hospital />}
+          title="Atendimento hospitalar"
+          text="Atendimento odontológico hospitalar conforme autorização da instituição, condição clínica do paciente e viabilidade técnica do caso."
+          href="/atendimento-hospitalar/"
+        />
+        <FeatureCard
+          icon={<Users />}
+          title="Cuidadores e instituições"
+          text="Orientação de higiene oral para familiares, cuidadores, ILPIs, casas de repouso e equipes de home care."
+          href="/instituicoes-e-cuidadores/"
+        />
+      </section>
+
+      <CtaBand
+        title="Precisa de atendimento odontológico domiciliar em Maringá?"
+        text="Conte pelo WhatsApp quem precisa do atendimento, a cidade, a principal queixa e se há dificuldade de locomoção ou internação."
+        messageKey="home"
+        location="home_bottom"
+      />
+    </>
+  );
+}
+
+function ServicesPage({ page }) {
+  const serviceGroups = [
+    {
+      title: "Avaliação e atendimento",
+      text: "Para entender a necessidade inicial, definir limites técnicos e organizar o cuidado no local mais adequado.",
+      services: serviceCards.slice(0, 3),
+    },
+    {
+      title: "Pacientes e famílias",
+      text: "Atendimento para pessoas que precisam de cuidado odontológico com menor deslocamento e orientação próxima da família.",
+      services: serviceCards.slice(3, 10),
+    },
+    {
+      title: "Cuidadores, instituições e escolas",
+      text: "Orientação prática para rotinas de higiene oral, prevenção e educação em saúde bucal.",
+      services: serviceCards.slice(10),
+    },
   ];
 
-  const sharePage = async () => {
-    const shareData = {
-      title: profile.brandName,
-      text: profile.intro,
-      url: window.location.origin + window.location.pathname,
-    };
-
-    if (navigator.share) {
-      await navigator.share(shareData);
-      return;
-    }
-
-    await navigator.clipboard?.writeText(shareData.url);
-  };
-
   return (
-    <main className={isPreview ? "site-page preview-page" : "site-page"}>
-      <div className="page-background" />
-      <section
-        className="link-shell"
-        aria-label="Página de atendimento homecare"
-      >
-        <div
-          className="top-marquee"
-          aria-label="Atendimento Especializado e Humanizado, Dentista em Casa, Maringá e Região"
+    <ContentPage page={page}>
+      <div className="services-intro">
+        <p>
+          Conheça os serviços da Odonto em Casa para atendimento odontológico
+          domiciliar, hospitalar, institucional e educativo em Maringá e região.
+          Cada caso passa por avaliação para definir o que pode ser feito no
+          local com segurança e o que precisa de consultório ou estrutura
+          hospitalar.
+        </p>
+        <WhatsAppLink
+          className="primary-button"
+          location="services_intro"
+          label="whatsapp_services_intro"
         >
-          <div className="top-marquee-track" aria-hidden="true">
-            {[...marqueeItems, ...marqueeItems, ...marqueeItems].map(
-              (item, index) => (
-                <span className="top-marquee-item" key={`${item}-${index}`}>
-                  {item}
-                </span>
-              ),
-            )}
-          </div>
-        </div>
-        <header className="hero">
-          <img
-            className="hero-image"
-            src={profile.coverImage}
-            alt="Kit odontológico preparado para atendimento domiciliar"
-          />
-          <div className="hero-scrim" />
-          <div className="hero-logo">
-            <BrandMark
-              profile={profile}
-              onOpenLogo={() => setIsLogoModalOpen(true)}
-            />
-            <p className="eyebrow">{profile.headline}</p>
-          </div>
-          <div className="hero-actions" aria-label="Ações rápidas">
-            <a
-              className="icon-button"
-              href={buildWhatsAppLink(profile)}
-              aria-label="Abrir WhatsApp"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <WhatsAppIcon aria-hidden="true" size={20} />
-            </a>
-            <button
-              className="icon-button"
-              type="button"
-              onClick={sharePage}
-              aria-label="Compartilhar página"
-            >
-              <ExternalLink aria-hidden="true" size={18} />
-            </button>
-          </div>
-
-          <div className="brand-panel">
-            <h1>Atendimento odontológico domiciliar e hospitalar</h1>
-            <p className="hero-lede">{profile.intro}</p>
-            <div className="hero-cta">
-              <a
-                className="primary-button"
-                href={buildWhatsAppLink(profile)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <WhatsAppIcon aria-hidden="true" size={19} />
-                FALAR NO WHATSAPP AGORA
-              </a>
-              <a className="ghost-button hero-secondary" href="#homecare">
-                Como funciona
-              </a>
+          <MessageCircle aria-hidden="true" size={20} />
+          Agendar avaliação pelo WhatsApp
+        </WhatsAppLink>
+      </div>
+      <div className="service-groups">
+        {serviceGroups.map((group) => (
+          <section className="service-group" key={group.title}>
+            <div className="service-group-heading">
+              <h2>{group.title}</h2>
+              <p>{group.text}</p>
             </div>
-            <p className="professional">{profile.professionalName}</p>
-            <p className="credential">{profile.credential}</p>
-          </div>
-        </header>
-
-        <div className="page-content">
-          <aside className="contact-panel" aria-label="Canais de atendimento">
-            <p className="eyebrow">Agendamento</p>
-            <h2>Fale com a Dra. Patrícia</h2>
-            <nav className="link-list" aria-label="Links principais">
-              {activeButtons.map((button) => (
-                <ActionButton
-                  key={button.id}
-                  button={button}
-                  profile={profile}
-                />
+            <div className="service-list">
+              {group.services.map((service) => (
+                <article className="service-card" key={service.title}>
+                  <h3>{service.title}</h3>
+                  <p>{service.text}</p>
+                </article>
               ))}
-            </nav>
-          </aside>
-
-          <div className="content-flow">
-            <section className="intro-block">
-              <p>
-                Atendimento pensado para pacientes que precisam de uma consulta
-                odontológica sem deslocamento, com avaliação individualizada e
-                orientação clara para a família ou equipe de cuidado.
-              </p>
-            </section>
-
-            <div className="desktop-feature-row">
-              <section className="info-section video-section" aria-labelledby="video-title">
-                <div className="section-heading">
-                  <Camera aria-hidden="true" size={20} />
-                  <h2 id="video-title">Conheça o atendimento</h2>
-                </div>
-                <div className="video-frame">
-                  <video controls preload="metadata" playsInline>
-                    <source src="/assets/video.mp4" type="video/mp4" />
-                    Seu navegador não suporta a reprodução deste vídeo.
-                  </video>
-                </div>
-              </section>
-
-              <div className="desktop-feature-stack">
-                <section className="info-section" id="homecare">
-                  <div className="section-heading">
-                    <Home aria-hidden="true" size={20} />
-                    <h2>Como funciona o homecare</h2>
-                  </div>
-                  <p>
-                    O atendimento vai até o paciente com planejamento,
-                    biossegurança e foco em conforto. É uma alternativa para
-                    avaliação, prevenção, acompanhamento e cuidados
-                    odontológicos individualizados.
-                  </p>
-                  <div className="feature-grid">
-                    <PatientItem icon="calendar" label="Agendamento direto" />
-                    <PatientItem icon="shield" label="Materiais organizados" />
-                    <PatientItem icon="home" label="Cuidado no domicílio" />
-                    <PatientItem icon="check" label="Plano de cuidado" />
-                  </div>
-                </section>
-
-                <section className="info-section" id="hospitalar">
-                  <div className="section-heading">
-                    <Hospital aria-hidden="true" size={20} />
-                    <h2>Atendimento hospitalar</h2>
-                  </div>
-                  <p>
-                    A avaliação odontológica também pode ser organizada em
-                    ambiente hospitalar ou instituições de cuidado, respeitando
-                    as rotinas do local e as necessidades clínicas de cada
-                    paciente.
-                  </p>
-                </section>
-              </div>
             </div>
-
-            <section className="info-section" id="pacientes">
-              <div className="section-heading">
-                <HeartPulse aria-hidden="true" size={20} />
-                <h2>Para quem é indicado</h2>
-              </div>
-              <div className="patient-grid">
-                <PatientItem icon="user" label="Idosos" />
-                <PatientItem
-                  icon="wheelchair"
-                  label="Dificuldade de locomoção"
-                />
-                <PatientItem icon="heart" label="Pacientes acamados" />
-                <PatientItem icon="baby" label="Crianças" />
-              </div>
-            </section>
-          </div>
-        </div>
-
-        <footer className="footer">
-          <span>{profile.serviceArea}</span>
-        </footer>
-      </section>
-
-      <LogoModal
-        imageSrc={profile.brandMarkImage}
-        brandName={profile.brandName}
-        isOpen={isLogoModalOpen}
-        onClose={() => setIsLogoModalOpen(false)}
+          </section>
+        ))}
+      </div>
+      <CtaBand
+        title="Página de serviços para o Perfil da Empresa"
+        text="Esta página concentra os serviços da Odonto em Casa para uso no Google Business Profile e em navegação interna do site."
+        location="services_bottom"
       />
-    </main>
+    </ContentPage>
   );
 }
 
-function ActionButton({ button, profile }) {
-  const Icon = iconMap[button.icon] || LinkIcon;
-  const href = resolveButtonHref(button, profile);
-  const external = isExternalHref(href);
-
+function HomecarePage({ page }) {
   return (
-    <a
-      className={button.highlighted ? "action-link highlighted" : "action-link"}
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
-    >
-      <span className="action-icon">
-        <Icon aria-hidden="true" size={21} />
-      </span>
-      <span className="action-text">{button.label}</span>
-      <ChevronRight aria-hidden="true" className="action-arrow" size={19} />
-    </a>
+    <ContentPage page={page}>
+      <p>
+        O atendimento odontológico domiciliar leva a avaliação do dentista até a
+        casa do paciente. É uma alternativa para idosos, pacientes acamados,
+        pessoas com dificuldade de locomoção, pessoas com necessidades
+        especiais, crianças e famílias que precisam de orientação sem deslocar o
+        paciente.
+      </p>
+      <InfoList
+        items={[
+          "A conversa inicial pelo WhatsApp levanta cidade, queixa, idade, condição geral e limitações do paciente.",
+          "A avaliação em casa verifica necessidade, ambiente, biossegurança, possibilidades e limites do atendimento domiciliar.",
+          "Equipamentos e materiais portáteis podem ser usados quando o caso permite, sem prometer que todo procedimento seja feito em casa.",
+          "Quando a situação exige estrutura maior, exames ou suporte específico, a família recebe orientação sobre encaminhamento adequado.",
+        ]}
+      />
+      <CtaBand
+        title="Agende uma avaliação odontológica domiciliar"
+        text="Envie as informações iniciais pelo WhatsApp para entender a melhor forma de atendimento."
+        location="domiciliar_bottom"
+      />
+    </ContentPage>
   );
 }
 
-function BrandMark({ profile, onOpenLogo }) {
-  const [imageFailed, setImageFailed] = useState(false);
-  const logoImage = profile.brandMarkImage?.trim();
-  const text =
-    profile.brandMarkText?.trim() || getBrandInitials(profile.brandName);
-
-  useEffect(() => {
-    setImageFailed(false);
-  }, [logoImage]);
-
-  if (logoImage && !imageFailed) {
-    return (
-      <button
-        className="brand-mark image-mark"
-        type="button"
-        onClick={onOpenLogo}
-        aria-label="Ampliar logo da marca"
-      >
-        <img src={logoImage} alt="" onError={() => setImageFailed(true)} />
-      </button>
-    );
-  }
-
+function HospitalPage({ page }) {
   return (
-    <div className="brand-mark" aria-hidden="true">
-      <span>{text}</span>
-    </div>
+    <ContentPage page={page}>
+      <p>
+        O atendimento odontológico hospitalar em Maringá e região pode ser
+        organizado quando há necessidade, possibilidade técnica e autorização da
+        instituição. A Odonto em Casa não promete atendimento irrestrito:
+        hospitais seguem protocolos próprios e a condição clínica do paciente
+        precisa ser considerada.
+      </p>
+      <InfoList
+        items={[
+          "A entrada no hospital depende de autorização formal ou liberação da instituição.",
+          "A avaliação considera regras hospitalares, risco clínico, materiais permitidos e necessidade de suporte da equipe.",
+          "Alguns casos podem ser apenas avaliados ou orientados no hospital e encaminhados para outro ambiente quando necessário.",
+          "Familiares e responsáveis devem informar internação, diagnóstico conhecido, medicações, restrições e contatos da equipe assistencial.",
+        ]}
+      />
+      <CtaBand
+        title="Fale sobre atendimento odontológico hospitalar"
+        text="Explique pelo WhatsApp a situação do paciente e o hospital ou instituição envolvida."
+        messageKey="hospitalar"
+        location="hospitalar_bottom"
+      />
+    </ContentPage>
   );
 }
 
-function LogoModal({ imageSrc, brandName, isOpen, onClose }) {
-  const logoImage = imageSrc?.trim();
-
-  useEffect(() => {
-    if (!isOpen) return undefined;
-
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") onClose();
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen || !logoImage) return null;
-
+function ElderlyPage({ page }) {
   return (
-    <div className="logo-modal-backdrop" role="presentation" onClick={onClose}>
-      <div
-        className="logo-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Logo da marca em tamanho ampliado"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <button
-          className="logo-modal-close"
-          type="button"
-          onClick={onClose}
-          aria-label="Fechar"
-        >
-          <X aria-hidden="true" size={22} />
-        </button>
-        <img src={logoImage} alt={`Logo ${brandName}`} />
+    <ContentPage page={page}>
+      <p>
+        Familiares e cuidadores costumam perceber mudanças na alimentação,
+        higiene oral e conforto antes que o paciente consiga explicar o que
+        sente. A avaliação odontológica domiciliar ajuda a entender sinais de
+        alerta sem deslocar idosos, pacientes acamados ou pessoas com mobilidade
+        reduzida.
+      </p>
+      <div className="alert-grid" aria-label="Sinais de alerta">
+        {[
+          "Dor na boca ou na face",
+          "Dificuldade para mastigar",
+          "Sangramento gengival",
+          "Mau hálito persistente",
+          "Prótese machucando",
+          "Feridas na boca",
+          "Dificuldade de higiene",
+          "Alteração alimentar",
+        ].map((item) => (
+          <span key={item}>
+            <CheckCircle2 aria-hidden="true" size={18} />
+            {item}
+          </span>
+        ))}
       </div>
-    </div>
+      <p>
+        Esses sinais não substituem consulta e não permitem diagnóstico online.
+        A conduta depende da avaliação presencial, histórico de saúde, ambiente
+        e viabilidade técnica.
+      </p>
+      <CtaBand
+        title="Atendimento para familiar idoso ou acamado"
+        text="Informe a cidade, idade, condição de locomoção, queixa principal e se há cuidador responsável."
+        messageKey="idosos"
+        location="idosos_bottom"
+      />
+    </ContentPage>
   );
 }
 
-function getBrandInitials(name) {
-  const initials = String(name || "")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
-
-  return initials || "OC";
-}
-
-function PatientItem({ icon, label }) {
-  const Icon = iconMap[icon] || Check;
+function ChildPage({ page }) {
   return (
-    <div className="patient-item">
-      <Icon aria-hidden="true" size={18} />
-      <span>{label}</span>
-    </div>
+    <ContentPage page={page}>
+      <p>
+        O atendimento odontológico infantil domiciliar busca acolher a criança,
+        orientar os pais e construir uma relação mais tranquila com o cuidado
+        bucal. A abordagem pode incluir prevenção, escovação, alimentação, medo
+        de dentista e adaptação gradual ao atendimento.
+      </p>
+      <InfoList
+        items={[
+          "Orientação aos pais sobre rotina de higiene oral, escovação e prevenção de cáries.",
+          "Acolhimento para crianças com receio do dentista, respeitando tempo, comunicação e segurança.",
+          "Atendimento em casa quando a avaliação indicar viabilidade e benefício para a família.",
+          "Ações educativas em saúde bucal para crianças em escolas, conforme disponibilidade e alinhamento com a instituição.",
+        ]}
+      />
+      <CtaBand
+        title="Fale sobre atendimento odontológico infantil em casa"
+        text="Envie a idade da criança, cidade, principal dúvida e objetivo do atendimento."
+        messageKey="infantil"
+        location="infantil_bottom"
+      />
+    </ContentPage>
   );
 }
 
-function AdminPanel({ config, onSave, onReset }) {
-  const [draft, setDraft] = useState(() => mergeConfig(config));
-  const [jsonText, setJsonText] = useState("");
-  const [status, setStatus] = useState("");
-
-  useEffect(() => {
-    setDraft(mergeConfig(config));
-  }, [config]);
-
-  const updateProfile = (field, value) => {
-    setDraft((current) => ({
-      ...current,
-      profile: {
-        ...current.profile,
-        [field]: value,
-      },
-    }));
-  };
-
-  const updateButton = (id, field, value) => {
-    setDraft((current) => ({
-      ...current,
-      buttons: current.buttons.map((button) =>
-        button.id === id ? { ...button, [field]: value } : button,
-      ),
-    }));
-  };
-
-  const addButton = () => {
-    setDraft((current) => ({
-      ...current,
-      buttons: [
-        ...current.buttons,
-        normalizeButton({
-          id: crypto.randomUUID(),
-          label: "Novo botão",
-          type: "custom",
-          icon: "link",
-          url: "https://",
-          active: true,
-        }),
-      ],
-    }));
-  };
-
-  const removeButton = (id) => {
-    setDraft((current) => ({
-      ...current,
-      buttons: current.buttons.filter((button) => button.id !== id),
-    }));
-  };
-
-  const moveButton = (index, direction) => {
-    setDraft((current) => {
-      const nextIndex = index + direction;
-      if (nextIndex < 0 || nextIndex >= current.buttons.length) return current;
-
-      const buttons = [...current.buttons];
-      const [button] = buttons.splice(index, 1);
-      buttons.splice(nextIndex, 0, button);
-      return { ...current, buttons };
-    });
-  };
-
-  const saveDraft = () => {
-    onSave(draft);
-    setStatus("Alterações salvas neste navegador.");
-  };
-
-  const copyJson = async () => {
-    const text = JSON.stringify(draft, null, 2);
-    setJsonText(text);
-    await navigator.clipboard?.writeText(text);
-    setStatus("Configuração copiada em JSON.");
-  };
-
-  const importJson = () => {
-    try {
-      const parsed = JSON.parse(jsonText);
-      setDraft(mergeConfig(parsed));
-      setStatus("JSON importado para o editor.");
-    } catch {
-      setStatus("Não foi possível ler esse JSON.");
-    }
-  };
-
-  const resetDraft = () => {
-    const next = onReset();
-    setDraft(next);
-    setStatus("Configuração original restaurada.");
+function CitiesPage({ page }) {
+  const cityTexts = {
+    Maringá:
+      "Maringá é a cidade principal de atendimento da Odonto em Casa, com foco em dentista domiciliar, atendimento hospitalar e orientação para famílias, cuidadores e instituições.",
+    Sarandi:
+      "Em Sarandi, o atendimento odontológico domiciliar ajuda famílias que precisam evitar deslocamentos de idosos, pacientes acamados, crianças ou pessoas com dificuldade de locomoção.",
+    Paiçandu:
+      "Em Paiçandu, a Odonto em Casa organiza avaliações em domicílio conforme disponibilidade de agenda, necessidade do paciente e possibilidade técnica do caso.",
+    Mandaguaçu:
+      "Em Mandaguaçu, o atendimento é indicado para quem busca dentista em casa com orientação clara para familiares e cuidadores antes da consulta.",
+    Marialva:
+      "Em Marialva, famílias podem solicitar avaliação odontológica domiciliar para idosos, pacientes com mobilidade reduzida, crianças e pessoas com necessidades especiais.",
+    Floresta:
+      "Em Floresta, a Odonto em Casa atende mediante agendamento e avaliação de deslocamento, sempre com orientação prévia pelo WhatsApp.",
+    Mandaguari:
+      "Em Mandaguari, o atendimento domiciliar é organizado para casos em que o deslocamento ao consultório é difícil ou precisa ser evitado.",
+    Iguaraçu:
+      "Em Iguaraçu, a avaliação odontológica domiciliar pode apoiar famílias e cuidadores na identificação de necessidades de saúde bucal.",
+    "Dr. Camargo":
+      "Em Dr. Camargo, o atendimento ocorre conforme agenda, distância, condições do paciente e viabilidade técnica do cuidado solicitado.",
   };
 
   return (
-    <main className="admin-page">
-      <section className="admin-workspace">
-        <header className="admin-header">
-          <div>
-            <p className="eyebrow">Painel de cadastro</p>
-            <h1>Editar página homecare</h1>
-          </div>
-          <div className="admin-header-actions">
-            <a className="ghost-button" href="#">
-              <ArrowLeft aria-hidden="true" size={18} />
-              Ver página
-            </a>
-            <button
-              className="primary-button"
-              type="button"
-              onClick={saveDraft}
-            >
-              <Save aria-hidden="true" size={18} />
-              Salvar
-            </button>
-          </div>
-        </header>
+    <ContentPage page={page}>
+      <p>
+        A Odonto em Casa atende Maringá e cidades próximas com odontologia
+        domiciliar e hospitalar mediante avaliação, agendamento e viabilidade
+        técnica.
+      </p>
+      <div className="city-grid">
+        {cities.map((city) => (
+          <article className="city-card" key={city}>
+            <h2>Dentista domiciliar em {city}</h2>
+            <p>{cityTexts[city]}</p>
+          </article>
+        ))}
+      </div>
+    </ContentPage>
+  );
+}
 
-        {status ? <p className="status-message">{status}</p> : null}
+function InstitutionsPage({ page }) {
+  return (
+    <ContentPage page={page}>
+      <p>
+        Casas de repouso, ILPIs, empresas de home care, cuidadores,
+        fisioterapeutas, fonoaudiólogos, nutricionistas e familiares podem
+        contar com orientação odontológica para melhorar a rotina de higiene
+        bucal e identificar sinais que merecem avaliação.
+      </p>
+      <InfoList
+        items={[
+          "Palestras e orientações para cuidadores e equipes de instituições.",
+          "Apoio a famílias que acompanham idosos, pacientes acamados ou pessoas com necessidades especiais.",
+          "Atendimento odontológico em instituições conforme autorização, agenda e viabilidade técnica.",
+          "Orientação de higiene oral adaptada à rotina da instituição ou do home care.",
+        ]}
+      />
+      <CtaBand
+        title="Fale sobre parceria ou orientação para cuidadores"
+        text="Envie o tipo de instituição, cidade, número aproximado de pessoas atendidas e objetivo da orientação."
+        messageKey="instituicoes"
+        location="instituicoes_bottom"
+      />
+    </ContentPage>
+  );
+}
 
-        <section className="admin-section">
-          <h2>Dados da marca</h2>
-          <div className="form-grid">
-            <TextField
-              label="Nome da marca"
-              value={draft.profile.brandName}
-              onChange={(value) => updateProfile("brandName", value)}
-            />
-            <TextField
-              label="Nome profissional"
-              value={draft.profile.professionalName}
-              onChange={(value) => updateProfile("professionalName", value)}
-            />
-            <TextField
-              label="CRO"
-              value={draft.profile.credential}
-              onChange={(value) => updateProfile("credential", value)}
-            />
-            <TextField
-              label="Texto do logo"
-              value={draft.profile.brandMarkText}
-              onChange={(value) => updateProfile("brandMarkText", value)}
-              placeholder="OC"
-            />
-            <TextField
-              label="Imagem do logo"
-              value={draft.profile.brandMarkImage}
-              onChange={(value) => updateProfile("brandMarkImage", value)}
-              placeholder="/assets/logo.png ou https://..."
-            />
-            <TextField
-              label="WhatsApp com DDI"
-              value={draft.profile.whatsappNumber}
-              onChange={(value) => updateProfile("whatsappNumber", value)}
-            />
-            <TextField
-              label="Instagram"
-              value={draft.profile.instagramUrl}
-              onChange={(value) => updateProfile("instagramUrl", value)}
-            />
-            <TextField
-              label="Imagem de fundo do topo"
-              value={draft.profile.coverImage}
-              onChange={(value) => updateProfile("coverImage", value)}
-            />
-            <TextField
-              label="Área de atendimento"
-              value={draft.profile.serviceArea}
-              onChange={(value) => updateProfile("serviceArea", value)}
-            />
-          </div>
-          <TextArea
-            label="Mensagem inicial do WhatsApp"
-            value={draft.profile.whatsappMessage}
-            onChange={(value) => updateProfile("whatsappMessage", value)}
-          />
-          <TextArea
-            label="Texto de apresentação"
-            value={draft.profile.intro}
-            onChange={(value) => updateProfile("intro", value)}
-          />
-        </section>
+function SchoolsPage({ page }) {
+  return (
+    <ContentPage page={page}>
+      <p>
+        A Odonto em Casa realiza ações educativas de saúde bucal para crianças
+        em escolas de Maringá e região, conforme disponibilidade e alinhamento
+        com a instituição. As atividades usam linguagem lúdica para falar sobre
+        escovação, alimentação, prevenção de cáries e cuidado com a saúde bucal.
+      </p>
+      <InfoList
+        items={[
+          "Conteúdo adaptado à faixa etária das crianças.",
+          "Orientação preventiva para reforçar hábitos de higiene bucal.",
+          "Conversas com educadores ou responsáveis quando a escola solicitar.",
+          "Ações gratuitas ou institucionais podem ser avaliadas conforme agenda e proposta.",
+        ]}
+      />
+      <CtaBand
+        title="Solicite uma ação educativa para escola"
+        text="Informe pelo WhatsApp o nome da escola, cidade, faixa etária e objetivo da atividade."
+        location="escolas_bottom"
+      />
+    </ContentPage>
+  );
+}
 
-        <section className="admin-section">
-          <div className="section-title-row">
-            <h2>Botões cadastrados</h2>
-            <button
-              className="secondary-button"
-              type="button"
-              onClick={addButton}
-            >
-              <Plus aria-hidden="true" size={18} />
-              Novo botão
-            </button>
-          </div>
-
-          <div className="button-editor-list">
-            {draft.buttons.map((button, index) => (
-              <ButtonEditor
-                key={button.id}
-                button={button}
-                index={index}
-                total={draft.buttons.length}
-                onChange={updateButton}
-                onRemove={removeButton}
-                onMove={moveButton}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="admin-section">
-          <h2>Exportar ou importar configuração</h2>
-          <p className="admin-note">
-            Em hospedagem estática, o painel salva localmente. Use o JSON para
-            guardar a configuração ou preparar uma futura integração com banco.
+function AboutPage({ page }) {
+  return (
+    <ContentPage page={page}>
+      <div className="about-grid">
+        <img
+          src="/assets/logo-icon3.png"
+          width="360"
+          height="360"
+          alt="Dra. Patrícia Craveiro, responsável técnica da Odonto em Casa"
+          loading="lazy"
+          decoding="async"
+        />
+        <div>
+          <p>
+            A Odonto em Casa é uma marca criada para levar atendimento
+            odontológico humanizado a quem precisa ou prefere ser atendido em
+            casa, hospital ou instituição.
           </p>
-          <div className="json-actions">
-            <button
-              className="secondary-button"
-              type="button"
-              onClick={copyJson}
-            >
-              <Copy aria-hidden="true" size={18} />
-              Copiar JSON
-            </button>
-            <button
-              className="secondary-button"
-              type="button"
-              onClick={importJson}
-            >
-              <Upload aria-hidden="true" size={18} />
-              Importar JSON
-            </button>
-            <button
-              className="danger-button"
-              type="button"
-              onClick={resetDraft}
-            >
-              <RefreshCw aria-hidden="true" size={18} />
-              Restaurar padrão
-            </button>
-          </div>
-          <textarea
-            className="json-textarea"
-            value={jsonText}
-            onChange={(event) => setJsonText(event.target.value)}
-            placeholder="Cole aqui uma configuração JSON para importar."
-          />
-        </section>
-      </section>
-
-      <aside className="admin-preview" aria-label="Prévia">
-        <PublicPage config={draft} isPreview />
-      </aside>
-    </main>
-  );
-}
-
-function ButtonEditor({ button, index, total, onChange, onRemove, onMove }) {
-  return (
-    <article className="button-editor">
-      <div className="button-editor-top">
-        <strong>{button.label}</strong>
-        <div className="button-editor-actions">
-          <button
-            type="button"
-            className="small-icon-button"
-            onClick={() => onMove(index, -1)}
-            disabled={index === 0}
-            aria-label="Mover para cima"
-          >
-            <ArrowUp aria-hidden="true" size={17} />
-          </button>
-          <button
-            type="button"
-            className="small-icon-button"
-            onClick={() => onMove(index, 1)}
-            disabled={index === total - 1}
-            aria-label="Mover para baixo"
-          >
-            <ArrowDown aria-hidden="true" size={17} />
-          </button>
-          <button
-            type="button"
-            className="small-icon-button destructive"
-            onClick={() => onRemove(button.id)}
-            aria-label="Remover botão"
-          >
-            <Trash2 aria-hidden="true" size={17} />
-          </button>
+          <p>
+            A responsável técnica e fundadora é a {site.professionalDisplayName}
+            , cirurgiã-dentista, {site.credential}. O atendimento atual
+            contempla odontologia domiciliar e hospitalar em Maringá e região,
+            com avaliação individualizada, orientação para familiares e respeito
+            aos limites técnicos de cada caso.
+          </p>
+          <p>
+            Quando aplicável, a atuação também inclui atendimento odontológico
+            infantil e ações educativas em saúde bucal para crianças. Não há
+            promessa de resultado, diagnóstico online ou atendimento em todos os
+            casos sem avaliação.
+          </p>
         </div>
       </div>
+    </ContentPage>
+  );
+}
 
-      <div className="form-grid compact">
-        <TextField
-          label="Texto do botão"
-          value={button.label}
-          onChange={(value) => onChange(button.id, "label", value)}
-        />
-        <label className="field">
-          <span>Tipo</span>
-          <select
-            value={button.type}
-            onChange={(event) =>
-              onChange(button.id, "type", event.target.value)
-            }
-          >
-            <option value="whatsapp">WhatsApp</option>
-            <option value="instagram">Instagram</option>
-            <option value="section">Seção da página</option>
-            <option value="custom">Link externo</option>
-            <option value="phone">Telefone</option>
-            <option value="email">E-mail</option>
-          </select>
-        </label>
-        <label className="field">
-          <span>Ícone</span>
-          <select
-            value={button.icon}
-            onChange={(event) =>
-              onChange(button.id, "icon", event.target.value)
-            }
-          >
-            {Object.keys(iconMap).map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <TextField
-          label="URL ou âncora"
-          value={button.url}
-          onChange={(value) => onChange(button.id, "url", value)}
-          placeholder="https://... ou #homecare"
-        />
+function FaqPage({ page }) {
+  return (
+    <ContentPage page={page}>
+      <div className="faq-list">
+        {faqItems.map((item) => (
+          <details key={item.question}>
+            <summary>
+              {item.question}
+              <ChevronDown aria-hidden="true" size={18} />
+            </summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
       </div>
+    </ContentPage>
+  );
+}
 
-      <div className="toggle-row">
-        <label>
-          <input
-            type="checkbox"
-            checked={button.active}
-            onChange={(event) =>
-              onChange(button.id, "active", event.target.checked)
-            }
-          />
-          Visível
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={button.highlighted}
-            onChange={(event) =>
-              onChange(button.id, "highlighted", event.target.checked)
-            }
-          />
-          Destacar
-        </label>
+function NotFoundPage({ page }) {
+  return (
+    <ContentPage page={page} compact>
+      <p>
+        A URL acessada não existe neste site. Como o domínio pode ter tido
+        conteúdo antigo indexado, esta página não é redirecionada
+        automaticamente para a home.
+      </p>
+      <div className="button-row">
+        <a className="secondary-button" href="/">
+          Voltar para a home
+        </a>
+        <WhatsAppLink
+          className="primary-button"
+          location="404"
+          label="whatsapp_404"
+        >
+          <MessageCircle aria-hidden="true" size={20} />
+          Agendar avaliação pelo WhatsApp
+        </WhatsAppLink>
       </div>
+    </ContentPage>
+  );
+}
+
+function ContentPage({ page, children, compact = false }) {
+  return (
+    <section className={compact ? "content-page compact-page" : "content-page"}>
+      <div className="page-title">
+        <p className="eyebrow">Odonto em Casa</p>
+        <h1>{page.h1}</h1>
+      </div>
+      <div className="content-body">{children}</div>
+    </section>
+  );
+}
+
+function FeatureCard({ icon, title, text, href }) {
+  return (
+    <article className="feature-card">
+      <div className="feature-icon" aria-hidden="true">
+        {icon}
+      </div>
+      <h2>{title}</h2>
+      <p>{text}</p>
+      <a className="text-link" href={href}>
+        Saiba mais
+      </a>
     </article>
   );
 }
 
-function TextField({ label, value, onChange, placeholder = "" }) {
+function InfoList({ items }) {
   return (
-    <label className="field">
-      <span>{label}</span>
-      <input
-        value={value}
-        placeholder={placeholder}
-        onChange={(event) => onChange(event.target.value)}
-      />
-    </label>
+    <ul className="info-list">
+      {items.map((item) => (
+        <li key={item}>
+          <CheckCircle2 aria-hidden="true" size={19} />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
-function TextArea({ label, value, onChange }) {
+function CtaBand({ title, text, messageKey = "default", location }) {
   return (
-    <label className="field field-wide">
-      <span>{label}</span>
-      <textarea
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      />
-    </label>
+    <section className="cta-band">
+      <div>
+        <h2>{title}</h2>
+        <p>{text}</p>
+      </div>
+      <WhatsAppLink
+        className="primary-button"
+        messageKey={messageKey}
+        location={location}
+        label={`whatsapp_${location}`}
+      >
+        <MessageCircle aria-hidden="true" size={20} />
+        Agendar avaliação pelo WhatsApp
+      </WhatsAppLink>
+    </section>
   );
 }
 
+function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="footer-main">
+        <div className="footer-brand">
+          <a className="footer-logo" href="/" aria-label="Odonto em Casa">
+            <img
+              src="/assets/logo-icon.png"
+              width="52"
+              height="52"
+              alt=""
+              loading="lazy"
+            />
+            <span>
+              <strong>Odonto em Casa</strong>
+              <small>Dentista domiciliar em Maringá e região</small>
+            </span>
+          </a>
+          <p>
+            Atendimento odontológico domiciliar e hospitalar para idosos,
+            pacientes acamados, pessoas com dificuldade de locomoção, pessoas
+            com necessidades especiais e crianças.
+          </p>
+        </div>
+
+        <nav className="footer-links" aria-label="Links do rodapé">
+          <strong>Site</strong>
+          <a href="/servicos/">Serviços</a>
+          <a href="/cidades-atendidas/">Cidades atendidas</a>
+          <a href="/faq/">Dúvidas</a>
+          <a href="/sobre/">Sobre</a>
+        </nav>
+
+        <div className="footer-contact">
+          <strong>Contato</strong>
+          <a href={site.instagramUrl} target="_blank" rel="noreferrer">
+            Instagram
+          </a>
+          <WhatsAppLink
+            className="footer-whatsapp"
+            location="footer"
+            label="whatsapp_footer"
+          >
+            <MessageCircle aria-hidden="true" size={18} />
+            Falar com a Odonto em Casa
+          </WhatsAppLink>
+        </div>
+      </div>
+
+      <div className="footer-bottom">
+        <p>
+          Responsável técnica: {site.professionalDisplayName} -{" "}
+          {site.credential}
+        </p>
+        <p>
+          Atendimento mediante avaliação, agendamento e viabilidade técnica do
+          caso.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+function WhatsAppLink({
+  children,
+  className,
+  messageKey = "default",
+  location,
+  label,
+}) {
+  const href = buildWhatsAppHref(messageKey);
+
+  const handleClick = () => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "click", {
+        event_category: "contato",
+        event_label: label || location || "whatsapp",
+        event_action: "click",
+      });
+    }
+  };
+
+  return (
+    <a
+      className={className}
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      data-event="whatsapp_click"
+      data-location={location}
+      onClick={handleClick}
+    >
+      {children}
+    </a>
+  );
+}
+
+function JsonLd({ data }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+function renderRoute(path, page) {
+  switch (path) {
+    case "/":
+      return <HomePage page={page} />;
+    case "/servicos/":
+      return <ServicesPage page={page} />;
+    case "/atendimento-domiciliar/":
+      return <HomecarePage page={page} />;
+    case "/atendimento-hospitalar/":
+      return <HospitalPage page={page} />;
+    case "/idosos-e-acamados/":
+      return <ElderlyPage page={page} />;
+    case "/atendimento-infantil/":
+      return <ChildPage page={page} />;
+    case "/cidades-atendidas/":
+      return <CitiesPage page={page} />;
+    case "/instituicoes-e-cuidadores/":
+      return <InstitutionsPage page={page} />;
+    case "/escolas/":
+      return <SchoolsPage page={page} />;
+    case "/sobre/":
+      return <AboutPage page={page} />;
+    case "/faq/":
+      return <FaqPage page={page} />;
+    default:
+      return <NotFoundPage page={page} />;
+  }
+}
+
+function applySeo(page, path, isNotFound) {
+  const canonicalPath = isNotFound ? "/404/" : path;
+  const canonicalUrl = `${site.canonicalOrigin}${canonicalPath === "/" ? "/" : canonicalPath}`;
+  const ogDescription = page.ogDescription || page.description;
+
+  document.documentElement.lang = "pt-BR";
+  document.title = page.title;
+  upsertMeta("name", "description", page.description);
+  upsertMeta(
+    "name",
+    "robots",
+    page.noindex ? "noindex,follow" : "index,follow",
+  );
+  upsertLink("canonical", canonicalUrl);
+  upsertMeta("property", "og:title", page.title);
+  upsertMeta("property", "og:description", ogDescription);
+  upsertMeta("property", "og:url", canonicalUrl);
+  upsertMeta("property", "og:image", site.ogImage);
+  upsertMeta("property", "og:type", "website");
+  upsertMeta("property", "og:locale", "pt_BR");
+  upsertMeta("name", "twitter:card", "summary_large_image");
+  upsertMeta("name", "twitter:title", page.title);
+  upsertMeta("name", "twitter:description", ogDescription);
+  upsertMeta("name", "twitter:image", site.ogImage);
+}
+
+function upsertMeta(attribute, key, content) {
+  let tag = document.head.querySelector(`meta[${attribute}="${key}"]`);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute(attribute, key);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute("content", content);
+}
+
+function upsertLink(rel, href) {
+  let tag = document.head.querySelector(`link[rel="${rel}"]`);
+  if (!tag) {
+    tag = document.createElement("link");
+    tag.setAttribute("rel", rel);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute("href", href);
+}
+
+function buildWhatsAppHref(messageKey = "default") {
+  const message = whatsappMessages[messageKey] || whatsappMessages.default;
+  return `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+function normalizePath(pathname) {
+  if (!pathname || pathname === "/") return "/";
+  const clean = pathname.split("?")[0].split("#")[0];
+  return clean.endsWith("/") ? clean : `${clean}/`;
+}
+
+export { routeOrder };
 export default App;

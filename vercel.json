@@ -1,0 +1,37 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "odontoemcasa.com.br"
+        }
+      ],
+      "destination": "https://www.odontoemcasa.com.br/$1",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    { "source": "/servicos", "destination": "/index.html" },
+    { "source": "/servicos/", "destination": "/index.html" },
+    { "source": "/atendimento-domiciliar", "destination": "/index.html" },
+    { "source": "/atendimento-domiciliar/", "destination": "/index.html" },
+    { "source": "/atendimento-hospitalar", "destination": "/index.html" },
+    { "source": "/atendimento-hospitalar/", "destination": "/index.html" },
+    { "source": "/idosos-e-acamados", "destination": "/index.html" },
+    { "source": "/idosos-e-acamados/", "destination": "/index.html" },
+    { "source": "/atendimento-infantil", "destination": "/index.html" },
+    { "source": "/atendimento-infantil/", "destination": "/index.html" },
+    { "source": "/cidades-atendidas", "destination": "/index.html" },
+    { "source": "/cidades-atendidas/", "destination": "/index.html" },
+    { "source": "/instituicoes-e-cuidadores", "destination": "/index.html" },
+    { "source": "/instituicoes-e-cuidadores/", "destination": "/index.html" },
+    { "source": "/escolas", "destination": "/index.html" },
+    { "source": "/escolas/", "destination": "/index.html" },
+    { "source": "/sobre", "destination": "/index.html" },
+    { "source": "/sobre/", "destination": "/index.html" },
+    { "source": "/faq", "destination": "/index.html" },
+    { "source": "/faq/", "destination": "/index.html" }
+  ]
+}

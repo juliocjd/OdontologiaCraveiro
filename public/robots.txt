@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.odontoemcasa.com.br/sitemap.xml
