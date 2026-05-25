@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "npm run images:optimize && npm run seo:generate && npm run seo:validate && vite build",
+    "images:optimize": "node scripts/optimize-images.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "seo:generate": "node scripts/generate-sitemap.mjs",
     "seo:validate": "node scripts/validate-seo.mjs"
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.1",
+    "sharp": "^0.34.5",
     "vite": "^8.0.11"
   }
 }

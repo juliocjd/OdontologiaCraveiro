@@ -65,7 +65,9 @@ function SiteLayout({ currentPath, children }) {
       <header className="site-header">
         <a className="brand-link" href="/" aria-label="Odonto em Casa">
           <img
-            src="/assets/logo-icon.png"
+            src="/assets/logo-icon-52.webp"
+            srcSet="/assets/logo-icon-52.webp 52w, /assets/logo-icon-104.webp 104w"
+            sizes="44px"
             width="44"
             height="44"
             alt=""
@@ -125,15 +127,27 @@ function HomePage({ page }) {
   return (
     <>
       <section className="hero" aria-labelledby="home-title">
-        <img
-          className="hero-image"
-          src={site.coverImage}
-          width="1600"
-          height="1067"
-          alt="Dentista domiciliar em Maringá"
-          fetchPriority="high"
-          decoding="async"
-        />
+        <picture>
+          <source
+            type="image/avif"
+            srcSet="/assets/homecare-dental-480.avif 480w, /assets/homecare-dental-768.avif 768w, /assets/homecare-dental-1024.avif 1024w, /assets/homecare-dental-1280.avif 1280w, /assets/homecare-dental-1600.avif 1600w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet="/assets/homecare-dental-480.webp 480w, /assets/homecare-dental-768.webp 768w, /assets/homecare-dental-1024.webp 1024w, /assets/homecare-dental-1280.webp 1280w, /assets/homecare-dental-1600.webp 1600w"
+            sizes="100vw"
+          />
+          <img
+            className="hero-image"
+            src="/assets/homecare-dental-1280.webp"
+            width="2752"
+            height="1536"
+            alt="Dentista domiciliar em Maringá"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
         <div className="hero-overlay" />
         <div className="hero-content">
           <p className="eyebrow">Odonto em Casa | Maringá e região</p>
@@ -512,7 +526,9 @@ function AboutPage({ page }) {
     <ContentPage page={page}>
       <div className="about-grid">
         <img
-          src="/assets/logo-icon3.png"
+          src="/assets/logo-icon3-360.webp"
+          srcSet="/assets/logo-icon3-360.webp 360w, /assets/logo-icon3-720.webp 720w"
+          sizes="(max-width: 820px) 100vw, 320px"
           width="360"
           height="360"
           alt="Dra. Patrícia Craveiro, responsável técnica da Odonto em Casa"
@@ -685,7 +701,9 @@ function Footer() {
         <div className="footer-brand">
           <a className="footer-logo" href="/" aria-label="Odonto em Casa">
             <img
-              src="/assets/logo-icon.png"
+              src="/assets/logo-icon-52.webp"
+              srcSet="/assets/logo-icon-52.webp 52w, /assets/logo-icon-104.webp 104w"
+              sizes="52px"
               width="52"
               height="52"
               alt=""
