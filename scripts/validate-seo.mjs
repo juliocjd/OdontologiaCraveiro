@@ -7,6 +7,8 @@ const wwwHost = ["www", "odontoemcasa.com.br"].join(".");
 const wwwOrigin = `https://${wwwHost}`;
 const publicRoutes = Object.keys(pages).filter((route) => route !== "/404/");
 const routeSet = new Set(publicRoutes);
+const privatePanelRoute = "/casa/";
+const privatePanelApi = "/api/casa";
 const failures = [];
 
 function fail(message) {
@@ -42,7 +44,7 @@ assert(site.logo === `${canonicalOrigin}/logo.png`, "logo must use apex domain")
 assert(site.ogImage === `${canonicalOrigin}/og-image.jpg`, "ogImage must use apex domain");
 assert(
   robots.trim() ===
-    `User-agent: *\nAllow: /\nSitemap: ${canonicalOrigin}/sitemap.xml`,
+    `User-agent: *\nDisallow: ${privatePanelRoute}\nDisallow: ${privatePanelApi}\nAllow: /\nSitemap: ${canonicalOrigin}/sitemap.xml`,
   "robots.txt does not match required directives",
 );
 assert(!sitemap.includes(wwwHost), "sitemap contains www host");
@@ -56,6 +58,8 @@ assert(
   "sitemap routes and pages routes are not synchronized",
 );
 assert(!sitemapRoutes.includes("/404/"), "404 route must not be in sitemap");
+assert(!sitemapRoutes.includes(privatePanelRoute), "private Casa panel must not be in sitemap");
+assert(!sitemap.includes(privatePanelApi), "private Casa API must not be in sitemap");
 assert(notFoundHtml.includes('name="robots" content="noindex,follow"'), "404 must be noindex,follow");
 assert(!indexHtml.includes(wwwHost), "index.html contains www host");
 assert(indexHtml.includes(`<link rel="canonical" href="${canonicalOrigin}/"`), "home canonical missing");
@@ -65,6 +69,7 @@ assert(jsonLdText.includes('"@type":"OfferCatalog"'), "JSON-LD is missing OfferC
 
 const redirects = vercelConfig.redirects || [];
 const rewrites = vercelConfig.rewrites || [];
+const privatePanelRewrite = rewrites.find((rewrite) => rewrite.source === privatePanelRoute);
 const hostRedirect = redirects.find((redirect) =>
   redirect.has?.some(
     (item) => item.type === "host" && item.value === wwwHost,
@@ -81,6 +86,11 @@ assert(
   !rewrites.some((rewrite) => rewrite.source === "/(.*)" && rewrite.destination === "/index.html"),
   "generic SPA catch-all rewrite is not allowed",
 );
+assert(
+  privatePanelRewrite?.destination === privatePanelApi,
+  "missing private Casa panel rewrite to server-side function",
+);
+assert(!routeSet.has(privatePanelRoute), "private Casa panel must not be a public React route");
 
 const nonHomeRoutes = publicRoutes.filter((route) => route !== "/");
 const rewriteSources = new Set(rewrites.map((rewrite) => rewrite.source));
@@ -95,11 +105,20 @@ for (const route of nonHomeRoutes) {
 }
 
 for (const rewrite of rewrites) {
+  if (rewrite.source === privatePanelRoute) {
+    assert(
+      rewrite.destination === privatePanelApi,
+      "private Casa panel rewrite must target the server-side function",
+    );
+    continue;
+  }
+
   assert(routeSet.has(rewrite.source), `rewrite points to unknown route ${rewrite.source}`);
   assert(rewrite.destination === "/index.html", `rewrite ${rewrite.source} must target /index.html`);
 }
 
 for (const item of [...navItems, ...homeServiceLinks]) {
+  assert(item.path !== privatePanelRoute, "private Casa panel must not be linked publicly");
   assert(routeSet.has(item.path), `internal link points to unknown route ${item.path}`);
   assert(
     item.path === "/" || item.path.endsWith("/"),

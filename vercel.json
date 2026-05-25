@@ -32,9 +32,11 @@
       "source": "/dentista-para-paciente-com-alzheimer-e-demencia",
       "destination": "/dentista-para-paciente-com-alzheimer-e-demencia/",
       "permanent": true
-    }
+    },
+    { "source": "/casa", "destination": "/casa/", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/casa/", "destination": "/api/casa" },
     { "source": "/servicos/", "destination": "/index.html" },
     { "source": "/atendimento-domiciliar/", "destination": "/index.html" },
     { "source": "/atendimento-hospitalar/", "destination": "/index.html" },
