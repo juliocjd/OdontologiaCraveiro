@@ -10,7 +10,6 @@ export const site = {
   professionalDisplayName: "Dra. Patrícia Craveiro",
   credential: "CRO/PR 40021",
   serviceArea: "Maringá e região",
-  coverImage: "/assets/homecare-dental-1280.webp",
 };
 
 export const cities = [

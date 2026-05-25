@@ -494,7 +494,6 @@ details {
   font-size: 1.04rem;
 }
 
-.service-grid,
 .city-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -870,7 +869,6 @@ details p {
   .intro-band,
   .section-grid,
   .home-services,
-  .service-grid,
   .service-list,
   .city-grid,
   .about-grid {

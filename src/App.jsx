@@ -23,8 +23,6 @@ import {
 } from "./data/siteData.js";
 import { buildJsonLd } from "./lib/seoData.js";
 
-const routeOrder = Object.keys(pages).filter((path) => path !== "/404/");
-
 function App() {
   const [path, setPath] = useState(() =>
     normalizePath(window.location.pathname),
@@ -892,5 +890,4 @@ function normalizePath(pathname) {
   return clean.endsWith("/") ? clean : `${clean}/`;
 }
 
-export { routeOrder };
 export default App;
