@@ -510,6 +510,82 @@ function InstitutionsPage({ page }) {
   );
 }
 
+// Pillar page for "home care" as its own topic — distinct from
+// /atendimento-domiciliar/ (a one-off dental visit at home for anyone).
+// Home care here means a patient already followed by a multidisciplinary
+// team (nursing, physiotherapy, medicine), often after hospital discharge,
+// in chronic-disease or palliative care. Linked from the main nav so it
+// gets the same internal-linking weight as the other care-setting pages.
+function HomeCareTeamPage({ page }) {
+  return (
+    <ContentPage page={page}>
+      <p>
+        Home care é diferente de uma visita odontológica avulsa em casa: em
+        geral é um paciente já acompanhado por uma equipe multiprofissional —
+        enfermagem, fisioterapia, medicina — de forma contínua, muitas vezes
+        após alta hospitalar, em tratamento de doença crônica ou em cuidado
+        paliativo. A Odonto em Casa atende esses pacientes em Maringá e
+        região, sempre com avaliação alinhada à família e à equipe já
+        responsável pelo cuidado.
+      </p>
+      <InfoList
+        items={[
+          "Pacientes acompanhados por empresa ou equipe de home care em Maringá e região.",
+          "Pacientes em pós-operatório, doença crônica, cuidado paliativo ou reabilitação em casa.",
+          "Famílias que precisam encaixar o cuidado odontológico na rotina já organizada do home care.",
+          "Equipes de home care que precisam de orientação de higiene bucal para o paciente.",
+        ]}
+      />
+      <div className="topic-layout">
+        <section className="topic-panel">
+          <h2>O que muda em relação a uma visita domiciliar comum</h2>
+          <p>
+            No home care, o paciente já tem rotina de medicação, dispositivos
+            (sonda, cateter, oxigênio) e uma equipe responsável. A avaliação
+            odontológica precisa se encaixar nessa rotina, não substituí-la —
+            o que pode significar horário combinado com a equipe, atenção a
+            restrições de posicionamento e alinhamento sobre o que pode ou
+            não ser feito no mesmo ambiente.
+          </p>
+        </section>
+        <section className="topic-panel">
+          <h2>O que informar antes da avaliação</h2>
+          <p>
+            Diagnóstico e histórico relevante, medicações em uso, dispositivos
+            ou restrições de movimento, contato do enfermeiro ou médico
+            responsável e se há autorização prévia da família ou da empresa de
+            home care para o atendimento odontológico.
+          </p>
+        </section>
+        <section className="topic-panel">
+          <h2>Quando o caso pede outro tipo de atendimento</h2>
+          <p>
+            Nem todo procedimento é possível no ambiente de home care. Quando
+            a condição clínica, o risco ou a complexidade exigem estrutura
+            maior, a orientação é encaminhar para consultório ou hospital,
+            sempre conversando com a família e a equipe assistencial.
+          </p>
+        </section>
+      </div>
+      <p>
+        Se o cuidado não envolve uma equipe de home care formal — por
+        exemplo, um idoso ou uma pessoa com dificuldade de locomoção que mora
+        em casa sem acompanhamento multiprofissional —, veja também o{" "}
+        <a className="text-link" href="/atendimento-domiciliar/">
+          atendimento odontológico domiciliar
+        </a>
+        .
+      </p>
+      <CtaBand
+        title="Fale sobre atendimento odontológico para paciente em home care"
+        text="Envie pelo WhatsApp a cidade, a condição do paciente, a equipe de home care envolvida (se houver) e a principal queixa."
+        messageKey="homeCare"
+        location="home_care_bottom"
+      />
+    </ContentPage>
+  );
+}
+
 function SchoolsPage({ page }) {
   return (
     <ContentPage page={page}>
@@ -861,6 +937,8 @@ function renderRoute(path, page) {
       return <CitiesPage page={page} />;
     case "/instituicoes-e-cuidadores/":
       return <InstitutionsPage page={page} />;
+    case "/dentista-para-paciente-em-home-care/":
+      return <HomeCareTeamPage page={page} />;
     case "/escolas/":
       return <SchoolsPage page={page} />;
     case "/sobre/":

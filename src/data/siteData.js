@@ -30,6 +30,7 @@ export const navItems = [
   { label: "Serviços", path: "/servicos/" },
   { label: "Atendimento domiciliar", path: "/atendimento-domiciliar/" },
   { label: "Atendimento hospitalar", path: "/atendimento-hospitalar/" },
+  { label: "Home care", path: "/dentista-para-paciente-em-home-care/" },
   { label: "Idosos e acamados", path: "/idosos-e-acamados/" },
   { label: "Atendimento infantil", path: "/atendimento-infantil/" },
   { label: "Cidades atendidas", path: "/cidades-atendidas/" },
@@ -451,10 +452,10 @@ export const pages = {
     h1: "Tratamento de gengiva em atendimento domiciliar",
   },
   "/dentista-para-paciente-em-home-care/": {
-    title: "Dentista para Paciente em Home Care em Maringá | Odonto em Casa",
+    title: "Dentista Home Care em Maringá | Odonto em Casa",
     description:
-      "Dentista para paciente em home care em Maringá e região, com avaliação odontológica domiciliar conforme equipe, família e condição clínica.",
-    h1: "Dentista para paciente em home care",
+      "Dentista para pacientes em home care em Maringá e região: avaliação odontológica coordenada com a equipe de enfermagem, médico e família responsáveis pelo cuidado.",
+    h1: "Dentista para pacientes em home care em Maringá",
     message: "homeCare",
   },
   "/dentista-para-paciente-com-alzheimer-e-demencia/": {
@@ -565,22 +566,6 @@ export const serviceDetailPages = {
     safety:
       "O tratamento depende da avaliação clínica, higiene, colaboração do paciente, extensão do problema e segurança do caso. Quando necessário, pode haver encaminhamento para estrutura complementar.",
     cta: "Agende uma avaliação de gengiva em atendimento domiciliar.",
-  },
-  "/dentista-para-paciente-em-home-care/": {
-    intro:
-      "Pacientes em home care podem precisar de acompanhamento odontológico para dor, higiene oral, próteses, feridas na boca ou prevenção de complicações. A Odonto em Casa atende Maringá e região com avaliação alinhada à família e à equipe assistencial.",
-    indicatedFor: [
-      "Pacientes em internação domiciliar ou acompanhamento por home care.",
-      "Famílias que precisam de dentista em casa para paciente debilitado.",
-      "Equipes e cuidadores que precisam de orientação de higiene bucal.",
-      "Pacientes com dificuldade de locomoção, uso de próteses ou queixas bucais.",
-    ],
-    homeHelp:
-      "O atendimento domiciliar permite avaliar o paciente no ambiente de cuidado, conversar com responsáveis e orientar uma rotina compatível com a condição clínica.",
-    safety:
-      "A conduta depende de autorização dos responsáveis, informações clínicas, medicações, risco do paciente, segurança do caso e viabilidade técnica do atendimento.",
-    cta: "Fale pelo WhatsApp sobre atendimento odontológico para home care.",
-    messageKey: "homeCare",
   },
   "/dentista-para-paciente-com-alzheimer-e-demencia/": {
     intro:
