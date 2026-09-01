@@ -868,7 +868,13 @@ details p {
   text-decoration: none;
 }
 
-@media (max-width: 1500px) {
+/* 1700px, not 1500px: with 12 nav items + WhatsApp button, the inline nav
+   needs more room than the header's fixed grid column reserves for it.
+   Between roughly 1501-1550px the nav no longer fit but the breakpoint
+   hadn't kicked in yet, so it visually overflowed backward over the brand
+   text ("Odonto em Casa" / tagline). Verified clean at 1560px+; 1700px
+   keeps a safety margin for font/zoom differences across browsers. */
+@media (max-width: 1700px) {
   .site-header {
     grid-template-columns: auto auto;
     justify-content: space-between;
