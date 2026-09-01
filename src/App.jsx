@@ -22,6 +22,30 @@ import {
   whatsappMessages,
 } from "./data/siteData.js";
 import { buildJsonLd } from "./lib/seoData.js";
+import { getSeoTags } from "./lib/seoHead.js";
+
+// Resolves a raw pathname to the page entry that should be rendered for it.
+// Pure and DOM-free so it can run both in the browser and during the
+// build-time prerender pass (see src/entry-server.jsx).
+export function resolvePage(pathname) {
+  const path = normalizePath(pathname);
+  const pagePath = pages[path] ? path : "/404/";
+  const page = pages[pagePath];
+  const isNotFound = pagePath === "/404/";
+  return { pagePath, page, isNotFound };
+}
+
+// Builds the full page tree (layout + JSON-LD + route content) for a given
+// pathname. DOM-free: used for the client render and for static prerender.
+export function renderPage(pathname) {
+  const { pagePath, page, isNotFound } = resolvePage(pathname);
+  return (
+    <SiteLayout currentPath={pagePath}>
+      <JsonLd data={buildJsonLd(pagePath, page, isNotFound)} />
+      {renderRoute(pagePath, page)}
+    </SiteLayout>
+  );
+}
 
 function App() {
   const [path, setPath] = useState(() =>
@@ -35,20 +59,13 @@ function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  const pagePath = pages[path] ? path : "/404/";
-  const page = pages[pagePath];
-  const isNotFound = pagePath === "/404/";
+  const { pagePath, page, isNotFound } = resolvePage(path);
 
   useEffect(() => {
     applySeo(page, pagePath, isNotFound);
   }, [page, pagePath, isNotFound]);
 
-  return (
-    <SiteLayout currentPath={pagePath}>
-      <JsonLd data={buildJsonLd(pagePath, page, isNotFound)} />
-      {renderRoute(pagePath, page)}
-    </SiteLayout>
-  );
+  return renderPage(path);
 }
 
 function SiteLayout({ currentPath, children }) {
@@ -636,11 +653,25 @@ function ContentPage({ page, children, compact = false }) {
   return (
     <section className={compact ? "content-page compact-page" : "content-page"}>
       <div className="page-title">
+        <Breadcrumb label={page.h1} />
         <p className="eyebrow">Odonto em Casa</p>
         <h1>{page.h1}</h1>
       </div>
       <div className="content-body">{children}</div>
     </section>
+  );
+}
+
+// Mirrors the BreadcrumbList JSON-LD emitted for every non-home route (see
+// buildJsonLd in src/lib/seoData.js) so the structured data matches what is
+// actually visible on the page.
+function Breadcrumb({ label }) {
+  return (
+    <nav className="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Início</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{label}</span>
+    </nav>
   );
 }
 
@@ -768,10 +799,18 @@ function WhatsAppLink({
 
   const handleClick = () => {
     if (typeof window.gtag === "function") {
+      const eventLabel = label || location || "whatsapp";
       window.gtag("event", "click", {
         event_category: "contato",
-        event_label: label || location || "whatsapp",
+        event_label: eventLabel,
         event_action: "click",
+      });
+      // GA4's own recommended event name for a lead-generation action, so it
+      // is picked up as a Key Event automatically without manual setup in
+      // the GA4 UI. Kept alongside "click" rather than replacing it.
+      window.gtag("event", "generate_lead", {
+        event_category: "contato",
+        event_label: eventLabel,
       });
     }
   };
@@ -834,29 +873,23 @@ function renderRoute(path, page) {
 }
 
 function applySeo(page, path, isNotFound) {
-  const canonicalPath = isNotFound ? "/404/" : path;
-  const canonicalUrl = `${site.canonicalOrigin}${canonicalPath === "/" ? "/" : canonicalPath}`;
-  const ogDescription = page.ogDescription || page.description;
+  const tags = getSeoTags(page, path, isNotFound);
 
   document.documentElement.lang = "pt-BR";
-  document.title = page.title;
-  upsertMeta("name", "description", page.description);
-  upsertMeta(
-    "name",
-    "robots",
-    page.noindex ? "noindex,follow" : "index,follow",
-  );
-  upsertLink("canonical", canonicalUrl);
-  upsertMeta("property", "og:title", page.title);
-  upsertMeta("property", "og:description", ogDescription);
-  upsertMeta("property", "og:url", canonicalUrl);
-  upsertMeta("property", "og:image", site.ogImage);
+  document.title = tags.title;
+  upsertMeta("name", "description", tags.description);
+  upsertMeta("name", "robots", tags.robots);
+  upsertLink("canonical", tags.canonicalUrl);
+  upsertMeta("property", "og:title", tags.ogTitle);
+  upsertMeta("property", "og:description", tags.ogDescription);
+  upsertMeta("property", "og:url", tags.ogUrl);
+  upsertMeta("property", "og:image", tags.ogImage);
   upsertMeta("property", "og:type", "website");
   upsertMeta("property", "og:locale", "pt_BR");
   upsertMeta("name", "twitter:card", "summary_large_image");
-  upsertMeta("name", "twitter:title", page.title);
-  upsertMeta("name", "twitter:description", ogDescription);
-  upsertMeta("name", "twitter:image", site.ogImage);
+  upsertMeta("name", "twitter:title", tags.twitterTitle);
+  upsertMeta("name", "twitter:description", tags.twitterDescription);
+  upsertMeta("name", "twitter:image", tags.twitterImage);
 }
 
 function upsertMeta(attribute, key, content) {

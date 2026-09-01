@@ -1,7 +1,11 @@
 import { writeFile } from "node:fs/promises";
 import { pages, site } from "../src/data/siteData.js";
 
-const lastmod = "2026-05-24";
+// Reflects the actual build date instead of a manually maintained, easily
+// stale constant. Every route shares one lastmod because the site has no
+// per-page edit-history tracking; this at least never lies about being
+// fresher than it is.
+const lastmod = new Date().toISOString().slice(0, 10);
 const routes = Object.keys(pages).filter((route) => route !== "/404/");
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

@@ -474,6 +474,35 @@ details {
     #fffdf8;
 }
 
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.breadcrumb a {
+  color: var(--green);
+  font-weight: 780;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.breadcrumb span[aria-current="page"] {
+  overflow: hidden;
+  max-width: 60ch;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .page-title h1 {
   max-width: 880px;
   margin: 0;

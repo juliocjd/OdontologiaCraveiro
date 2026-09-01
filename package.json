@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "npm run images:optimize && npm run seo:generate && npm run seo:validate && vite build",
+    "build": "npm run images:optimize && npm run seo:generate && vite build && vite build --ssr src/entry-server.jsx --outDir dist-server && node scripts/prerender.mjs && npm run seo:validate",
     "images:optimize": "node scripts/optimize-images.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "seo:generate": "node scripts/generate-sitemap.mjs",
