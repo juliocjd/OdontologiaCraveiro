@@ -56,25 +56,5 @@
     },
     { "source": "/casa", "destination": "/casa/", "permanent": true }
   ],
-  "rewrites": [
-    { "source": "/casa/", "destination": "/api/casa" },
-    { "source": "/servicos/", "destination": "/index.html" },
-    { "source": "/atendimento-domiciliar/", "destination": "/index.html" },
-    { "source": "/atendimento-hospitalar/", "destination": "/index.html" },
-    { "source": "/idosos-e-acamados/", "destination": "/index.html" },
-    { "source": "/atendimento-infantil/", "destination": "/index.html" },
-    { "source": "/cidades-atendidas/", "destination": "/index.html" },
-    { "source": "/instituicoes-e-cuidadores/", "destination": "/index.html" },
-    { "source": "/escolas/", "destination": "/index.html" },
-    { "source": "/sobre/", "destination": "/index.html" },
-    { "source": "/faq/", "destination": "/index.html" },
-    { "source": "/limpeza-dentaria-em-casa/", "destination": "/index.html" },
-    { "source": "/higiene-bucal-para-acamados/", "destination": "/index.html" },
-    { "source": "/protese-dentaria-em-casa/", "destination": "/index.html" },
-    { "source": "/dor-de-dente-em-casa/", "destination": "/index.html" },
-    { "source": "/tratamento-de-carie-em-casa/", "destination": "/index.html" },
-    { "source": "/tratamento-de-gengiva-em-casa/", "destination": "/index.html" },
-    { "source": "/dentista-para-paciente-em-home-care/", "destination": "/index.html" },
-    { "source": "/dentista-para-paciente-com-alzheimer-e-demencia/", "destination": "/index.html" }
-  ]
+  "rewrites": [{ "source": "/casa/", "destination": "/api/casa" }]
 }

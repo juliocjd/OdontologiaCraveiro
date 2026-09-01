@@ -1,4 +1,4 @@
-import { cities, serviceCards, site } from "../data/siteData.js";
+import { cities, faqItems, serviceCards, site } from "../data/siteData.js";
 
 export function buildJsonLd(path, page, isNotFound = false) {
   const canonicalPath = isNotFound ? "/404/" : path;
@@ -66,6 +66,21 @@ export function buildJsonLd(path, page, isNotFound = false) {
   };
 
   const graph = [organization, dentist, person, service];
+
+  if (path === "/faq/") {
+    graph.push({
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    });
+  }
 
   if (path !== "/" || isNotFound) {
     graph.push({

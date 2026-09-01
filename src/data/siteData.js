@@ -10,6 +10,7 @@ export const site = {
   professionalDisplayName: "Dra. Patrícia Craveiro",
   credential: "CRO/PR 40021",
   serviceArea: "Maringá e região",
+  gaMeasurementId: "G-4EH3DR1G73",
 };
 
 export const cities = [
@@ -110,12 +111,12 @@ export const serviceCards = [
   {
     key: "limpeza",
     title: "Limpeza dentária em casa",
-    text: "Avaliação para limpeza dentária domiciliar em Maringá e região, quando o ambiente, a condição clínica e a segurança do caso permitem.",
+    text: "Avaliação para uma limpeza dentária pontual em casa — remoção de tártaro e polimento —, quando o ambiente, a condição clínica e a segurança do caso permitem.",
   },
   {
     key: "profilaxia",
-    title: "Profilaxia dentária domiciliar",
-    text: "Cuidado preventivo em casa, mediante avaliação, para reduzir acúmulo de placa, orientar higiene e acompanhar a saúde bucal.",
+    title: "Programa de profilaxia domiciliar",
+    text: "Plano de visitas preventivas recorrentes em casa, com controle de placa e acompanhamento periódico da saúde bucal, indicado para quem já está em cuidado domiciliar regular.",
   },
   {
     key: "higiene-acamados",
@@ -126,54 +127,54 @@ export const serviceCards = [
   {
     key: "higiene-idosos",
     title: "Higiene bucal para idosos",
-    text: "Avaliação da higiene oral, próteses, gengiva e dificuldades de cuidado diário, sempre conforme necessidade e viabilidade técnica.",
+    text: "Avaliação inicial da higiene oral do idoso — próteses, gengiva e dificuldades do dia a dia —, para entender o que precisa de atenção imediata.",
     message: "idosos",
   },
   {
     key: "cuidados-idosos",
-    title: "Cuidados bucais para idosos em casa",
-    text: "Acompanhamento e orientação para idosos em casa, considerando mastigação, próteses, dor, medicamentos e apoio do cuidador.",
+    title: "Acompanhamento bucal contínuo para idosos em casa",
+    text: "Plano de acompanhamento periódico para idosos já em cuidado domiciliar, considerando mastigação, próteses, dor, medicamentos em uso e a rotina de quem cuida.",
     message: "idosos",
   },
   {
     key: "cuidadores",
     title: "Orientação de higiene bucal para cuidadores",
-    text: "Treinamento prático para melhorar a higiene bucal diária de idosos, pacientes acamados e pessoas dependentes de cuidado.",
+    text: "Treinamento prático, individual ou em pequenos grupos, para cuidadores aplicarem a técnica correta de higiene bucal no dia a dia de quem cuidam.",
     message: "instituicoes",
   },
   {
     key: "avaliacao-protese",
     title: "Avaliação de prótese dentária em casa",
-    text: "Verificação de próteses que machucam, soltam, dificultam a mastigação ou provocam feridas, sempre com avaliação presencial.",
+    text: "Primeira avaliação para qualquer queixa de prótese — dor, folga, dificuldade de mastigar ou desconforto —, para identificar a causa e indicar o próximo passo com segurança.",
     message: "protese",
   },
   {
     key: "ajuste-protese",
     title: "Ajuste de prótese dentária em casa",
-    text: "Avaliação da possibilidade de ajuste ou orientação sobre próteses, conforme segurança, materiais necessários e condição da boca.",
+    text: "Para prótese solta, frouxa ou que se move ao falar e mastigar — avaliação da possibilidade de ajuste, conforme segurança, materiais e condição da boca.",
     message: "protese",
   },
   {
     key: "manutencao-protese",
     title: "Manutenção de prótese dentária em domicílio",
-    text: "Orientação e avaliação de manutenção de próteses em domicílio, com encaminhamento quando o caso exigir laboratório ou consultório.",
+    text: "Orientação de limpeza, armazenamento e cuidado diário para quem já usa prótese sem queixa, com encaminhamento a laboratório ou consultório quando o caso exigir.",
     message: "protese",
   },
   {
     key: "protese-machucando",
     title: "Atendimento para prótese dentária machucando",
-    text: "Avaliação de feridas, dor, pressão e dificuldade para mastigar causadas por prótese, com conduta definida após exame presencial.",
+    text: "Foco em prótese que machuca: feridas, pressão e dor na gengiva causadas pelo encaixe, com avaliação presencial antes de qualquer conduta.",
     message: "protese",
   },
   {
     key: "carie",
     title: "Tratamento de cárie em casa",
-    text: "Avaliação de lesões de cárie e possibilidade de tratamento domiciliar, quando houver viabilidade técnica e segurança do caso.",
+    text: "Avaliação de suspeita de cárie — dor, sensibilidade ou cavidade visível —, para entender a extensão da lesão e se o tratamento em casa é tecnicamente viável.",
   },
   {
     key: "restauracao",
     title: "Restauração dentária em casa",
-    text: "Restauração pode ser avaliada para atendimento em domicílio, considerando acesso, material, isolamento, extensão da lesão e conforto do paciente.",
+    text: "Para quando a cárie já foi identificada ou uma restauração antiga quebrou: avaliação da obturação em domicílio, considerando acesso, material, isolamento e extensão da lesão.",
   },
   {
     key: "gengiva",
@@ -183,66 +184,66 @@ export const serviceCards = [
   {
     key: "dor",
     title: "Dor de dente em casa",
-    text: "Avaliação de dor de dente em domicílio para identificar sinais de alerta e orientar a conduta possível com segurança.",
+    text: "Orientação inicial sobre dor de dente: possíveis causas, sinais de alerta e o que observar até a avaliação, sem substituir exame presencial.",
     message: "dor",
   },
   {
     key: "dor-domicilio",
     title: "Atendimento para dor de dente em domicílio",
-    text: "Atendimento mediante avaliação para pacientes com dor e dificuldade de deslocamento, sem promessa de resolução em todos os casos.",
+    text: "Atendimento para quem tem dor e não consegue se deslocar até um consultório — avaliação mediante agenda, sem promessa de resolução em todos os casos.",
     message: "dor",
   },
   {
     key: "urgencia",
     title: "Urgência odontológica domiciliar",
-    text: "Avaliação de queixas urgentes em casa conforme agenda, condição clínica, segurança e viabilidade técnica, sem caracterizar pronto atendimento contínuo.",
+    text: "Para queixas urgentes além da dor — trauma, inchaço, prótese quebrada —, avaliadas conforme agenda e viabilidade técnica; não substitui plantão ou pronto-socorro odontológico.",
     message: "dor",
   },
   {
     key: "idosos",
     title: "Atendimento para idosos",
-    text: "Apoio odontológico para idosos, com atenção a próteses, dor, higiene oral, mastigação e sinais que precisam de avaliação presencial.",
+    text: "Porta de entrada para qualquer queixa odontológica de idosos com mobilidade preservada ou reduzida — próteses, dor, higiene e mastigação.",
     message: "idosos",
   },
   {
     key: "acamados",
     title: "Atendimento para pacientes acamados",
-    text: "Consulta odontológica domiciliar para pacientes acamados, com planejamento individual e orientação para familiares e cuidadores.",
+    text: "Atendimento para pacientes que não saem da cama: planejamento de posicionamento seguro, atenção ao risco de engasgo e orientação prática para quem cuida no dia a dia.",
     message: "idosos",
   },
   {
     key: "alzheimer",
     title: "Dentista para paciente com Alzheimer",
-    text: "Atendimento odontológico domiciliar com abordagem cuidadosa, comunicação adaptada e avaliação da segurança para pacientes com Alzheimer.",
+    text: "Atendimento adaptado ao estágio do Alzheimer — comunicação simplificada, rotina previsível e avaliação de segurança para colaborar com o tratamento.",
     message: "idosos",
   },
   {
     key: "demencia",
     title: "Dentista para paciente com demência",
-    text: "Avaliação odontológica para pacientes com demência, considerando rotina, colaboração, cuidador responsável e condição clínica.",
+    text: "Avaliação odontológica para quadros de demência em geral, inclusive Alzheimer, considerando nível de colaboração, rotina do paciente e orientação ao cuidador responsável.",
     message: "idosos",
   },
   {
     key: "internacao-domiciliar",
     title: "Atendimento odontológico em internação domiciliar",
-    text: "Cuidado odontológico para pacientes em internação domiciliar, conforme alinhamento com família, equipe assistencial e viabilidade técnica.",
+    text: "Para pacientes em internação domiciliar formal, com quadro clínico mais complexo, em cuidado odontológico coordenado com médico e equipe assistencial responsável.",
     message: "homeCare",
   },
   {
     key: "home-care",
     title: "Dentista para paciente em home care",
-    text: "Avaliação e orientação odontológica para pacientes acompanhados por equipes de home care em Maringá e região.",
+    text: "Para pacientes acompanhados por empresa ou equipe de home care em rotina de cuidado contínuo, com avaliação odontológica alinhada ao plano já em andamento.",
     message: "homeCare",
   },
   {
     key: "dificuldade-locomocao",
     title: "Pessoas com dificuldade de locomoção",
-    text: "Atendimento para pessoas que enfrentam barreiras de deslocamento até o consultório, sempre mediante avaliação do caso.",
+    text: "Atendimento para quem enfrenta qualquer barreira de deslocamento até o consultório — física, logística ou de transporte —, sempre mediante avaliação do caso.",
   },
   {
     key: "pne",
     title: "Pessoas com necessidades especiais",
-    text: "Cuidado odontológico acolhedor para pessoas com necessidades especiais, considerando comunicação, rotina, segurança e conforto.",
+    text: "Cuidado odontológico acolhedor para pessoas com deficiência física, intelectual ou sensorial, com comunicação e ambiente adaptados a cada necessidade.",
   },
   {
     key: "casa-repouso",
@@ -270,7 +271,7 @@ export const serviceCards = [
   {
     key: "palestras",
     title: "Palestras para cuidadores e instituições",
-    text: "Orientação para casas de repouso, ILPIs, home cares e equipes multiprofissionais sobre cuidado bucal na rotina.",
+    text: "Palestra ou roda de conversa para equipes de casas de repouso, ILPIs e home cares sobre saúde bucal na rotina de cuidado — formato de evento, não treinamento individual.",
     message: "instituicoes",
   },
 ];

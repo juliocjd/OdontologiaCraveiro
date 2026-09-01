@@ -27,11 +27,31 @@ No provedor DNS, aponte:
 Não configure redirecionamento genérico de todas as URLs antigas para a home.
 URLs inexistentes devem retornar 404 para evitar soft 404.
 
+## Prerender por rota
+
+O build (`npm run build`) gera um arquivo HTML estático e distinto para cada rota
+pública (`dist/servicos/index.html`, `dist/sobre/index.html` etc.), já com
+`<title>`, meta description, canonical, Open Graph e JSON-LD corretos daquela
+página e com o conteúdo visível (h1, texto) pronto no HTML — sem depender de
+JavaScript rodar. Isso é feito por `scripts/prerender.mjs`, a partir de um bundle
+de servidor gerado por `vite build --ssr src/entry-server.jsx`. O React ainda
+hidrata o mesmo HTML no client para manter a navegação da SPA e o menu mobile.
+
+Antes dessa mudança, `vercel.json` reescrevia todas as rotas para o mesmo
+`/index.html`, então qualquer bot que não executasse JavaScript (crawlers no
+primeiro passo de rastreamento, prévias de link do WhatsApp/Instagram/Twitter)
+via sempre o título e a descrição da home, não importa a página compartilhada.
+`npm run seo:validate` agora falha o build se algum arquivo prerenderizado
+estiver faltando ou com `<title>`/canonical/JSON-LD errado — não só a
+configuração-fonte.
+
 ## 404
 
-O projeto inclui `public/404.html` com `noindex,follow`. O `vercel.json` reescreve
-apenas as rotas públicas conhecidas para a SPA. Caminhos antigos ou desconhecidos
-devem cair no 404 estático da hospedagem.
+O projeto inclui `public/404.html` com `noindex,follow`. O `vercel.json` não tem
+mais rewrite genérico para rotas de conteúdo: cada rota pública existe como
+arquivo estático real em `dist/`, então a Vercel serve o arquivo diretamente.
+Caminhos antigos ou desconhecidos não têm arquivo correspondente e devem cair
+no 404 estático da hospedagem.
 
 ## Pós-deploy
 
