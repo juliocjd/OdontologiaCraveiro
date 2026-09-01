@@ -579,6 +579,19 @@ details {
   gap: 12px;
 }
 
+/* Groups have 3, 5, 6, 8 or 10 cards — not always a multiple of 3 — so a
+   trailing row can end with a single card stranded in the first column
+   with two empty tracks beside it (e.g. the 10-card group). Grid columns
+   apply to the whole grid, not per row, so auto-fit/auto-fill alone can't
+   fix this: it still reserves 3 tracks because the container is wide
+   enough for 3. Target that exact case instead — a card that is both the
+   last one and would start a new row (position ≡ 1 mod 3) — and let it
+   span the full row. A 2-card trailing row is left as-is: a single gap
+   next to two cards reads fine and isn't worth the extra selector.  */
+.service-list > :nth-child(3n + 1):last-child {
+  grid-column: 1 / -1;
+}
+
 .info-list {
   display: grid;
   gap: 12px;
