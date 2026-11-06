@@ -1,4 +1,4 @@
-import { renderToStaticMarkup } from "react-dom/server";
+import { renderToString } from "react-dom/server";
 import { pages } from "./data/siteData.js";
 import { renderPage } from "./App.jsx";
 import { getSeoTags } from "./lib/seoHead.js";
@@ -10,7 +10,7 @@ export const routes = Object.keys(pages).filter((route) => route !== "/404/");
 
 export function renderRouteHtml(path) {
   const page = pages[path];
-  const markup = renderToStaticMarkup(renderPage(path));
+  const markup = renderToString(renderPage(path));
   const tags = getSeoTags(page, path, false);
   return { markup, tags };
 }
