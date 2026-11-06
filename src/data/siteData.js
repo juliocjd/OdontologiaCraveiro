@@ -10,6 +10,8 @@ export const site = {
   professionalDisplayName: "Dra. Patrícia Craveiro",
   credential: "CRO/PR 40021",
   serviceArea: "Maringá e região",
+  serviceAreaNotice: "Atendimento presencial somente em Maringá e região, no Paraná.",
+  whatsappCityPrompt: "Minha cidade é: ",
   gaMeasurementId: "G-4EH3DR1G73",
 };
 
@@ -100,17 +102,20 @@ export const serviceCards = [
   },
   {
     key: "atendimento-casa",
+    path: "/atendimento-domiciliar/",
     title: "Atendimento odontológico em casa",
     text: "Cuidado planejado para quem prefere ou precisa receber o dentista em casa, com equipamentos portáteis e orientação para a família.",
   },
   {
     key: "atendimento-hospitalar",
+    path: "/atendimento-hospitalar/",
     title: "Atendimento odontológico hospitalar",
     text: "Avaliação e atendimento conforme autorização da instituição, condição clínica do paciente, regras hospitalares e possibilidade técnica.",
     message: "hospitalar",
   },
   {
     key: "limpeza",
+    path: "/limpeza-dentaria-em-casa/",
     title: "Limpeza dentária em casa",
     text: "Avaliação para uma limpeza dentária pontual em casa — remoção de tártaro e polimento —, quando o ambiente, a condição clínica e a segurança do caso permitem.",
   },
@@ -121,12 +126,14 @@ export const serviceCards = [
   },
   {
     key: "higiene-acamados",
+    path: "/higiene-bucal-para-acamados/",
     title: "Higiene bucal para acamados",
     text: "Orientação e cuidado bucal para pacientes acamados, com foco em rotina segura, conforto e apoio aos familiares ou cuidadores.",
     message: "idosos",
   },
   {
     key: "higiene-idosos",
+    path: "/higiene-bucal-para-acamados/",
     title: "Higiene bucal para idosos",
     text: "Avaliação inicial da higiene oral do idoso — próteses, gengiva e dificuldades do dia a dia —, para entender o que precisa de atenção imediata.",
     message: "idosos",
@@ -139,57 +146,67 @@ export const serviceCards = [
   },
   {
     key: "cuidadores",
+    path: "/instituicoes-e-cuidadores/",
     title: "Orientação de higiene bucal para cuidadores",
     text: "Treinamento prático, individual ou em pequenos grupos, para cuidadores aplicarem a técnica correta de higiene bucal no dia a dia de quem cuidam.",
     message: "instituicoes",
   },
   {
     key: "avaliacao-protese",
+    path: "/protese-dentaria-em-casa/",
     title: "Avaliação de prótese dentária em casa",
     text: "Primeira avaliação para qualquer queixa de prótese — dor, folga, dificuldade de mastigar ou desconforto —, para identificar a causa e indicar o próximo passo com segurança.",
     message: "protese",
   },
   {
     key: "ajuste-protese",
+    path: "/protese-dentaria-em-casa/",
     title: "Ajuste de prótese dentária em casa",
     text: "Para prótese solta, frouxa ou que se move ao falar e mastigar — avaliação da possibilidade de ajuste, conforme segurança, materiais e condição da boca.",
     message: "protese",
   },
   {
     key: "manutencao-protese",
+    path: "/protese-dentaria-em-casa/",
     title: "Manutenção de prótese dentária em domicílio",
     text: "Orientação de limpeza, armazenamento e cuidado diário para quem já usa prótese sem queixa, com encaminhamento a laboratório ou consultório quando o caso exigir.",
     message: "protese",
   },
   {
     key: "protese-machucando",
+    path: "/protese-dentaria-em-casa/",
     title: "Atendimento para prótese dentária machucando",
     text: "Foco em prótese que machuca: feridas, pressão e dor na gengiva causadas pelo encaixe, com avaliação presencial antes de qualquer conduta.",
     message: "protese",
   },
   {
     key: "carie",
+    path: "/tratamento-de-carie-em-casa/",
     title: "Tratamento de cárie em casa",
     text: "Avaliação de suspeita de cárie — dor, sensibilidade ou cavidade visível —, para entender a extensão da lesão e se o tratamento em casa é tecnicamente viável.",
   },
   {
     key: "restauracao",
+    path: "/tratamento-de-carie-em-casa/",
     title: "Restauração dentária em casa",
     text: "Para quando a cárie já foi identificada ou uma restauração antiga quebrou: avaliação da obturação em domicílio, considerando acesso, material, isolamento e extensão da lesão.",
   },
   {
     key: "gengiva",
+    path: "/tratamento-de-gengiva-em-casa/",
     title: "Tratamento de gengiva em casa",
     text: "Avaliação de sangramento, inflamação, higiene e desconforto gengival, com orientação ou cuidado conforme condição clínica.",
   },
   {
     key: "dor",
+    path: "/dor-de-dente-em-casa/",
     title: "Dor de dente em casa",
     text: "Orientação inicial sobre dor de dente: possíveis causas, sinais de alerta e o que observar até a avaliação, sem substituir exame presencial.",
     message: "dor",
   },
   {
     key: "dor-domicilio",
+    path: "/dor-de-dente-em-casa/",
     title: "Atendimento para dor de dente em domicílio",
     text: "Atendimento para quem tem dor e não consegue se deslocar até um consultório — avaliação mediante agenda, sem promessa de resolução em todos os casos.",
     message: "dor",
@@ -202,36 +219,42 @@ export const serviceCards = [
   },
   {
     key: "idosos",
+    path: "/idosos-e-acamados/",
     title: "Atendimento para idosos",
     text: "Porta de entrada para qualquer queixa odontológica de idosos com mobilidade preservada ou reduzida — próteses, dor, higiene e mastigação.",
     message: "idosos",
   },
   {
     key: "acamados",
+    path: "/idosos-e-acamados/",
     title: "Atendimento para pacientes acamados",
     text: "Atendimento para pacientes que não saem da cama: planejamento de posicionamento seguro, atenção ao risco de engasgo e orientação prática para quem cuida no dia a dia.",
     message: "idosos",
   },
   {
     key: "alzheimer",
+    path: "/dentista-para-paciente-com-alzheimer-e-demencia/",
     title: "Dentista para paciente com Alzheimer",
     text: "Atendimento adaptado ao estágio do Alzheimer — comunicação simplificada, rotina previsível e avaliação de segurança para colaborar com o tratamento.",
     message: "idosos",
   },
   {
     key: "demencia",
+    path: "/dentista-para-paciente-com-alzheimer-e-demencia/",
     title: "Dentista para paciente com demência",
     text: "Avaliação odontológica para quadros de demência em geral, inclusive Alzheimer, considerando nível de colaboração, rotina do paciente e orientação ao cuidador responsável.",
     message: "idosos",
   },
   {
     key: "internacao-domiciliar",
+    path: "/dentista-para-paciente-em-home-care/",
     title: "Atendimento odontológico em internação domiciliar",
     text: "Para pacientes em internação domiciliar formal, com quadro clínico mais complexo, em cuidado odontológico coordenado com médico e equipe assistencial responsável.",
     message: "homeCare",
   },
   {
     key: "home-care",
+    path: "/dentista-para-paciente-em-home-care/",
     title: "Dentista para paciente em home care",
     text: "Para pacientes acompanhados por empresa ou equipe de home care em rotina de cuidado contínuo, com avaliação odontológica alinhada ao plano já em andamento.",
     message: "homeCare",
@@ -248,29 +271,34 @@ export const serviceCards = [
   },
   {
     key: "casa-repouso",
+    path: "/instituicoes-e-cuidadores/",
     title: "Avaliação odontológica em casa de repouso",
     text: "Atendimento em casas de repouso e ILPIs conforme autorização da instituição, agenda, ambiente e segurança do caso.",
     message: "instituicoes",
   },
   {
     key: "paciente-hospitalizado",
+    path: "/atendimento-hospitalar/",
     title: "Dentista para paciente hospitalizado",
     text: "Avaliação odontológica para paciente hospitalizado conforme autorização da instituição, regras hospitalares e condição clínica.",
     message: "hospitalar",
   },
   {
     key: "infantil",
+    path: "/atendimento-infantil/",
     title: "Atendimento odontológico infantil domiciliar",
     text: "Atendimento odontológico infantil em casa, com acolhimento, prevenção, orientação aos pais e adaptação gradual da criança.",
     message: "infantil",
   },
   {
     key: "escolas",
+    path: "/escolas/",
     title: "Ações educativas em escolas",
     text: "Atividades de saúde bucal para crianças, com linguagem lúdica sobre escovação, alimentação e prevenção.",
   },
   {
     key: "palestras",
+    path: "/instituicoes-e-cuidadores/",
     title: "Palestras para cuidadores e instituições",
     text: "Palestra ou roda de conversa para equipes de casas de repouso, ILPIs e home cares sobre saúde bucal na rotina de cuidado — formato de evento, não treinamento individual.",
     message: "instituicoes",
@@ -342,42 +370,42 @@ export const pages = {
   "/": {
     title: "Dentista Domiciliar em Maringá | Odonto em Casa",
     description:
-      "Atendimento odontológico domiciliar e hospitalar em Maringá e região para idosos, pacientes acamados, hospitalizados, pessoas com dificuldade de locomoção, pessoas com necessidades especiais e crianças. Agende pelo WhatsApp.",
+      "Atendimento odontológico domiciliar e hospitalar em Maringá e região (PR) para idosos, pacientes acamados, hospitalizados, pessoas com dificuldade de locomoção, pessoas com necessidades especiais e crianças. Agende pelo WhatsApp.",
     ogDescription:
-      "Atendimento odontológico domiciliar e hospitalar em Maringá e região, com cuidado humanizado para quem precisa receber atendimento em casa, hospital ou instituição.",
-    h1: "Dentista domiciliar e hospitalar em Maringá e região",
+      "Atendimento odontológico domiciliar e hospitalar em Maringá e região (PR), com cuidado humanizado para quem precisa receber atendimento em casa, hospital ou instituição.",
+    h1: "Dentista domiciliar e hospitalar em Maringá e região (PR)",
     message: "home",
   },
   "/servicos/": {
     title: "Serviços de Odontologia Domiciliar em Maringá | Odonto em Casa",
     description:
-      "Conheça os serviços da Odonto em Casa: avaliação odontológica domiciliar, limpeza dentária em casa, próteses, dor de dente, idosos, acamados, home care e atendimento hospitalar em Maringá e região.",
+      "Conheça os serviços da Odonto em Casa: avaliação odontológica domiciliar, limpeza dentária em casa, próteses, dor de dente, idosos, acamados, home care e atendimento hospitalar em Maringá e região (PR).",
     h1: "Serviços de odontologia domiciliar e hospitalar em Maringá",
   },
   "/atendimento-domiciliar/": {
     title: "Atendimento Odontológico Domiciliar em Maringá | Odonto em Casa",
     description:
-      "Dentista em casa em Maringá e região. Atendimento odontológico domiciliar para quem tem dificuldade de locomoção, idosos, acamados, pessoas com necessidades especiais e crianças.",
+      "Dentista em casa em Maringá e região (PR). Atendimento odontológico domiciliar para quem tem dificuldade de locomoção, idosos, acamados, pessoas com necessidades especiais e crianças.",
     h1: "Atendimento odontológico domiciliar em Maringá",
   },
   "/atendimento-hospitalar/": {
     title: "Atendimento Odontológico Hospitalar em Maringá | Odonto em Casa",
     description:
-      "Atendimento odontológico hospitalar em Maringá e região, conforme avaliação, autorização da instituição e possibilidade técnica do caso.",
+      "Atendimento odontológico hospitalar em Maringá e região (PR), conforme avaliação, autorização da instituição e possibilidade técnica do caso.",
     h1: "Atendimento odontológico hospitalar em Maringá",
     message: "hospitalar",
   },
   "/idosos-e-acamados/": {
     title: "Dentista para Idosos e Pacientes Acamados em Maringá | Odonto em Casa",
     description:
-      "Atendimento odontológico domiciliar para idosos, pacientes acamados e pessoas com mobilidade reduzida em Maringá e região. Orientação para familiares e cuidadores.",
+      "Atendimento odontológico domiciliar para idosos, pacientes acamados e pessoas com mobilidade reduzida em Maringá e região (PR). Orientação para familiares e cuidadores.",
     h1: "Dentista para idosos e pacientes acamados em Maringá",
     message: "idosos",
   },
   "/atendimento-infantil/": {
     title: "Atendimento Odontológico Infantil em Casa em Maringá | Odonto em Casa",
     description:
-      "Atendimento odontológico infantil domiciliar e orientação de saúde bucal para crianças e famílias em Maringá e região.",
+      "Atendimento odontológico infantil domiciliar e orientação de saúde bucal para crianças e famílias em Maringá e região (PR).",
     h1: "Atendimento odontológico infantil em casa",
     message: "infantil",
   },
@@ -390,20 +418,20 @@ export const pages = {
   "/instituicoes-e-cuidadores/": {
     title: "Parcerias com Casas de Repouso, Home Care e Cuidadores | Odonto em Casa",
     description:
-      "A Odonto em Casa realiza orientação e atendimento odontológico para instituições, cuidadores, casas de repouso e equipes de home care em Maringá e região.",
+      "A Odonto em Casa realiza orientação e atendimento odontológico para instituições, cuidadores, casas de repouso e equipes de home care em Maringá e região (PR).",
     h1: "Odontologia domiciliar para instituições, cuidadores e famílias",
     message: "instituicoes",
   },
   "/escolas/": {
     title: "Educação em Saúde Bucal para Escolas em Maringá | Odonto em Casa",
     description:
-      "Ações educativas de saúde bucal para crianças em escolas de Maringá e região, com linguagem lúdica e orientação preventiva.",
+      "Ações educativas de saúde bucal para crianças em escolas de Maringá e região (PR), com linguagem lúdica e orientação preventiva.",
     h1: "Educação em saúde bucal para escolas",
   },
   "/sobre/": {
     title: "Sobre a Odonto em Casa | Atendimento Odontológico Domiciliar em Maringá",
     description:
-      "Conheça a Odonto em Casa e a Dra. Patrícia Craveiro, responsável técnica pelo atendimento odontológico domiciliar e hospitalar em Maringá e região.",
+      "Conheça a Odonto em Casa e a Dra. Patrícia Craveiro, responsável técnica pelo atendimento odontológico domiciliar e hospitalar em Maringá e região (PR).",
     h1: "Sobre a Odonto em Casa",
   },
   "/faq/": {
@@ -415,53 +443,53 @@ export const pages = {
   "/limpeza-dentaria-em-casa/": {
     title: "Limpeza Dentária em Casa em Maringá | Odonto em Casa",
     description:
-      "Limpeza dentária em casa em Maringá e região, mediante avaliação, condição clínica do paciente e viabilidade técnica do atendimento domiciliar.",
+      "Limpeza dentária em casa em Maringá e região (PR), mediante avaliação, condição clínica do paciente e viabilidade técnica do atendimento domiciliar.",
     h1: "Limpeza dentária em casa em Maringá",
   },
   "/higiene-bucal-para-acamados/": {
     title: "Higiene Bucal para Acamados em Maringá | Odonto em Casa",
     description:
-      "Orientação e cuidado de higiene bucal para acamados, idosos e cuidadores em Maringá e região, conforme avaliação e segurança do caso.",
+      "Orientação e cuidado de higiene bucal para acamados, idosos e cuidadores em Maringá e região (PR), conforme avaliação e segurança do caso.",
     h1: "Higiene bucal para acamados e idosos",
     message: "idosos",
   },
   "/protese-dentaria-em-casa/": {
     title: "Prótese Dentária em Casa em Maringá | Odonto em Casa",
     description:
-      "Avaliação e cuidados com prótese dentária em casa em Maringá e região, incluindo prótese machucando, ajustes e orientação conforme viabilidade técnica.",
+      "Avaliação e cuidados com prótese dentária em casa em Maringá e região (PR), incluindo prótese machucando, ajustes e orientação conforme viabilidade técnica.",
     h1: "Avaliação e cuidados com prótese dentária em casa",
     message: "protese",
   },
   "/dor-de-dente-em-casa/": {
     title: "Dor de Dente em Casa em Maringá | Odonto em Casa",
     description:
-      "Atendimento para dor de dente em casa em Maringá e região, mediante avaliação da queixa, condição clínica e segurança do caso.",
+      "Atendimento para dor de dente em casa em Maringá e região (PR), mediante avaliação da queixa, condição clínica e segurança do caso.",
     h1: "Atendimento para dor de dente em casa",
     message: "dor",
   },
   "/tratamento-de-carie-em-casa/": {
     title: "Tratamento de Cárie em Casa em Maringá | Odonto em Casa",
     description:
-      "Avaliação para tratamento de cárie e restauração em casa em Maringá e região, conforme viabilidade técnica e segurança do paciente.",
+      "Avaliação para tratamento de cárie e restauração em casa em Maringá e região (PR), conforme viabilidade técnica e segurança do paciente.",
     h1: "Tratamento de cárie e restauração em casa",
   },
   "/tratamento-de-gengiva-em-casa/": {
     title: "Tratamento de Gengiva em Casa em Maringá | Odonto em Casa",
     description:
-      "Avaliação de gengiva em atendimento domiciliar em Maringá e região, para sangramento, inflamação, higiene e orientação preventiva.",
+      "Avaliação de gengiva em atendimento domiciliar em Maringá e região (PR), para sangramento, inflamação, higiene e orientação preventiva.",
     h1: "Tratamento de gengiva em atendimento domiciliar",
   },
   "/dentista-para-paciente-em-home-care/": {
     title: "Dentista Home Care em Maringá | Odonto em Casa",
     description:
-      "Dentista para pacientes em home care em Maringá e região: avaliação odontológica coordenada com a equipe de enfermagem, médico e família responsáveis pelo cuidado.",
+      "Dentista para pacientes em home care em Maringá e região (PR): avaliação odontológica coordenada com a equipe de enfermagem, médico e família responsáveis pelo cuidado.",
     h1: "Dentista para pacientes em home care em Maringá",
     message: "homeCare",
   },
   "/dentista-para-paciente-com-alzheimer-e-demencia/": {
     title: "Dentista para Paciente com Alzheimer e Demência em Maringá | Odonto em Casa",
     description:
-      "Atendimento odontológico domiciliar para pacientes com Alzheimer e demência em Maringá e região, conforme avaliação, rotina e segurança do caso.",
+      "Atendimento odontológico domiciliar para pacientes com Alzheimer e demência em Maringá e região (PR), conforme avaliação, rotina e segurança do caso.",
     h1: "Atendimento odontológico para pacientes com Alzheimer e demência",
     message: "idosos",
   },

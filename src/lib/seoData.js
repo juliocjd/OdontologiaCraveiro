@@ -3,6 +3,12 @@ import { cities, faqItems, serviceCards, site } from "../data/siteData.js";
 export function buildJsonLd(path, page, isNotFound = false) {
   const canonicalPath = isNotFound ? "/404/" : path;
   const url = `${site.canonicalOrigin}${canonicalPath === "/" ? "/" : canonicalPath}`;
+  // City names alone are ambiguous (there are other "Floresta"s in Brazil).
+  const areaServed = cities.map((city) => ({
+    "@type": "City",
+    name: city,
+    containedInPlace: { "@type": "State", name: "Paraná" },
+  }));
   const organization = {
     "@type": "Organization",
     "@id": `${site.canonicalOrigin}/#organization`,
@@ -12,7 +18,7 @@ export function buildJsonLd(path, page, isNotFound = false) {
     image: site.ogImage,
     telephone: `+${site.whatsappNumber}`,
     sameAs: [site.instagramUrl],
-    areaServed: cities.map((city) => ({ "@type": "City", name: city })),
+    areaServed,
     founder: { "@id": `${site.canonicalOrigin}/#dra-patricia-craveiro` },
   };
   const person = {
@@ -32,7 +38,7 @@ export function buildJsonLd(path, page, isNotFound = false) {
     "@id": `${site.canonicalOrigin}/#servico-odontologia-domiciliar`,
     name: "Atendimento odontológico domiciliar e hospitalar",
     provider: { "@id": `${site.canonicalOrigin}/#organization` },
-    areaServed: "Maringá e região",
+    areaServed,
     serviceType: "Odontologia domiciliar e hospitalar",
     description:
       "Atendimento odontológico em domicílio, hospitais e instituições para idosos, pacientes acamados, hospitalizados, pessoas com dificuldade de locomoção, pessoas com necessidades especiais e crianças.",
@@ -57,12 +63,18 @@ export function buildJsonLd(path, page, isNotFound = false) {
     image: site.ogImage,
     logo: site.logo,
     telephone: `+${site.whatsappNumber}`,
-    areaServed: cities.map((city) => ({ "@type": "City", name: city })),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Maringá",
+      addressRegion: "PR",
+      addressCountry: "BR",
+    },
+    areaServed,
     parentOrganization: { "@id": `${site.canonicalOrigin}/#organization` },
     employee: { "@id": `${site.canonicalOrigin}/#dra-patricia-craveiro` },
     sameAs: [site.instagramUrl],
     description:
-      "Dentista domiciliar e hospitalar em Maringá e região, com atendimento mediante avaliação, condição clínica do paciente e viabilidade técnica do caso.",
+      "Dentista domiciliar e hospitalar em Maringá e região (PR), com atendimento mediante avaliação, condição clínica do paciente e viabilidade técnica do caso.",
   };
 
   const graph = [organization, dentist, person, service];
