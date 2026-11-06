@@ -900,6 +900,94 @@ details p {
    hadn't kicked in yet, so it visually overflowed backward over the brand
    text ("Odonto em Casa" / tagline). Verified clean at 1560px+; 1700px
    keeps a safety margin for font/zoom differences across browsers. */
+.city-check {
+  width: min(520px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.city-check::backdrop {
+  background: rgba(23, 60, 52, 0.6);
+}
+
+.city-check-content {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: 24px;
+}
+
+.city-check h2 {
+  margin: 0;
+  padding-right: 36px;
+  color: var(--green-dark);
+  font-size: 1.35rem;
+}
+
+.city-check p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.city-check-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--green-dark);
+  cursor: pointer;
+}
+
+.city-check-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.city-check-options a {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid rgba(36, 92, 79, 0.14);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  color: var(--green-dark);
+  font-weight: 750;
+  text-align: center;
+  text-decoration: none;
+}
+
+.city-check-options a:hover {
+  background: var(--green);
+  color: #fffdf8;
+}
+
+.city-check .secondary-button {
+  cursor: pointer;
+  font: inherit;
+  font-weight: 850;
+}
+
+@media (max-width: 420px) {
+  .city-check-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 1700px) {
   .site-header {
     grid-template-columns: auto auto;

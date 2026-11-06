@@ -373,7 +373,7 @@ export const pages = {
       "Atendimento odontológico domiciliar e hospitalar em Maringá e região (PR) para idosos, pacientes acamados, hospitalizados, pessoas com dificuldade de locomoção, pessoas com necessidades especiais e crianças. Agende pelo WhatsApp.",
     ogDescription:
       "Atendimento odontológico domiciliar e hospitalar em Maringá e região (PR), com cuidado humanizado para quem precisa receber atendimento em casa, hospital ou instituição.",
-    h1: "Dentista domiciliar e hospitalar em Maringá e região (PR)",
+    h1: "Dentista domiciliar e hospitalar em Maringá e região",
     message: "home",
   },
   "/servicos/": {
