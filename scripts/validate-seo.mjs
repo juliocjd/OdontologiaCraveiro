@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { pages, site, navItems, homeServiceLinks } from "../src/data/siteData.js";
+import { pages, serviceCards, site, navItems, homeServiceLinks } from "../src/data/siteData.js";
 import { buildJsonLd } from "../src/lib/seoData.js";
 
 const canonicalOrigin = "https://odontoemcasa.com.br";
@@ -122,7 +122,7 @@ assert(
   "private Casa panel rewrite must target the server-side function",
 );
 
-for (const item of [...navItems, ...homeServiceLinks]) {
+for (const item of [...navItems, ...homeServiceLinks, ...serviceCards.filter((card) => card.path)]) {
   assert(item.path !== privatePanelRoute, "private Casa panel must not be linked publicly");
   assert(routeSet.has(item.path), `internal link points to unknown route ${item.path}`);
   assert(

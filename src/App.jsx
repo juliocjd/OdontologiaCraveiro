@@ -165,7 +165,7 @@ function HomePage({ page }) {
         </picture>
         <div className="hero-overlay" />
         <div className="hero-content">
-          <p className="eyebrow">Odonto em Casa | Maringá e região</p>
+          <p className="eyebrow">Odonto em Casa | Maringá e região (PR)</p>
           <h1 id="home-title">{page.h1}</h1>
           <p className="hero-lede">
             Cuidado odontológico humanizado em casa, hospitais e instituições
@@ -190,8 +190,8 @@ function HomePage({ page }) {
             </a>
           </div>
           <p className="technical-note">
-            Sob responsabilidade técnica da {site.professionalDisplayName},{" "}
-            {site.credential}.
+            {site.serviceAreaNotice} Sob responsabilidade técnica da{" "}
+            {site.professionalDisplayName}, {site.credential}.
           </p>
         </div>
       </section>
@@ -300,7 +300,13 @@ function ServicesPage({ page }) {
                 .filter(Boolean)
                 .map((service) => (
                   <article className="service-card" key={service.key}>
-                    <h3>{service.title}</h3>
+                    <h3>
+                      {service.path ? (
+                        <a href={service.path}>{service.title}</a>
+                      ) : (
+                        service.title
+                      )}
+                    </h3>
                     <p>{service.text}</p>
                   </article>
                 ))}
@@ -309,8 +315,8 @@ function ServicesPage({ page }) {
         ))}
       </div>
       <CtaBand
-        title="Página de serviços para o Perfil da Empresa"
-        text="Esta página concentra os serviços da Odonto em Casa para uso no Google Business Profile e em navegação interna do site."
+        title="Não sabe qual serviço se encaixa no seu caso?"
+        text="Conte pelo WhatsApp a cidade, quem precisa do atendimento e a principal queixa. A avaliação define o que pode ser feito no local com segurança."
         location="services_bottom"
       />
     </ContentPage>
@@ -576,6 +582,7 @@ function HomeCareTeamPage({ page }) {
         </a>
         .
       </p>
+      <RelatedServices currentPath="/dentista-para-paciente-em-home-care/" />
       <CtaBand
         title="Fale sobre atendimento odontológico para paciente em home care"
         text="Envie pelo WhatsApp a cidade, a condição do paciente, a equipe de home care envolvida (se houver) e a principal queixa."
@@ -690,6 +697,7 @@ function ServiceTopicPage({ page, path }) {
           <p>{detail.safety}</p>
         </section>
       </div>
+      <RelatedServices currentPath={path} />
       <CtaBand
         title={detail.cta}
         text="Envie pelo WhatsApp a cidade, idade do paciente, principal queixa, condição de locomoção e se há cuidador ou equipe acompanhando."
@@ -730,7 +738,7 @@ function ContentPage({ page, children, compact = false }) {
     <section className={compact ? "content-page compact-page" : "content-page"}>
       <div className="page-title">
         <Breadcrumb label={page.h1} />
-        <p className="eyebrow">Odonto em Casa</p>
+        <p className="eyebrow">Odonto em Casa | Maringá e região (PR)</p>
         <h1>{page.h1}</h1>
       </div>
       <div className="content-body">{children}</div>
@@ -748,6 +756,25 @@ function Breadcrumb({ label }) {
       <span aria-hidden="true">/</span>
       <span aria-current="page">{label}</span>
     </nav>
+  );
+}
+
+// homeServiceLinks is otherwise only rendered on the home page, which left
+// these pages with a single internal link each.
+function RelatedServices({ currentPath }) {
+  return (
+    <section className="related-services">
+      <h2>Outros atendimentos em casa</h2>
+      <div className="home-service-links">
+        {homeServiceLinks
+          .filter((item) => item.path !== currentPath)
+          .map((item) => (
+            <a key={item.path} href={item.path}>
+              {item.label}
+            </a>
+          ))}
+      </div>
+    </section>
   );
 }
 
@@ -785,6 +812,10 @@ function CtaBand({ title, text, messageKey = "default", location }) {
       <div>
         <h2>{title}</h2>
         <p>{text}</p>
+        <p className="cta-area-note">
+          {site.serviceAreaNotice}{" "}
+          <a href="/cidades-atendidas/">Ver cidades atendidas</a>
+        </p>
       </div>
       <WhatsAppLink
         className="primary-button"
@@ -992,7 +1023,8 @@ function upsertLink(rel, href) {
 
 function buildWhatsAppHref(messageKey = "default") {
   const message = whatsappMessages[messageKey] || whatsappMessages.default;
-  return `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(message)}`;
+  const text = `${message} ${site.whatsappCityPrompt}`;
+  return `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(text)}`;
 }
 
 function normalizePath(pathname) {
