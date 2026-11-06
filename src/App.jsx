@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   CheckCircle2,
   ChevronDown,
@@ -902,39 +903,144 @@ function WhatsAppLink({
   location,
   label,
 }) {
-  const href = buildWhatsAppHref(messageKey);
+  const [isAskingCity, setIsAskingCity] = useState(false);
+  const eventLabel = label || location || "whatsapp";
 
-  const handleClick = () => {
-    if (typeof window.gtag === "function") {
-      const eventLabel = label || location || "whatsapp";
-      window.gtag("event", "click", {
-        event_category: "contato",
-        event_label: eventLabel,
-        event_action: "click",
-      });
-      // GA4's own recommended event name for a lead-generation action, so it
-      // is picked up as a Key Event automatically without manual setup in
-      // the GA4 UI. Kept alongside "click" rather than replacing it.
-      window.gtag("event", "generate_lead", {
-        event_category: "contato",
-        event_label: eventLabel,
-      });
-    }
+  // The real wa.me link stays in the prerendered HTML, so the button still
+  // works before hydration and without JavaScript. Once hydrated, the click
+  // asks where the care will happen before opening WhatsApp.
+  const handleClick = (event) => {
+    event.preventDefault();
+    trackEvent("click", {
+      event_category: "contato",
+      event_label: eventLabel,
+      event_action: "click",
+    });
+    setIsAskingCity(true);
   };
 
   return (
-    <a
-      className={className}
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      data-event="whatsapp_click"
-      data-location={location}
-      onClick={handleClick}
-    >
-      {children}
-    </a>
+    <>
+      <a
+        className={className}
+        href={buildWhatsAppHref(messageKey)}
+        target="_blank"
+        rel="noreferrer"
+        data-event="whatsapp_click"
+        data-location={location}
+        onClick={handleClick}
+      >
+        {children}
+      </a>
+      {isAskingCity && (
+        <CityCheckDialog
+          messageKey={messageKey}
+          eventLabel={eventLabel}
+          onClose={() => setIsAskingCity(false)}
+        />
+      )}
+    </>
   );
+}
+
+// Rendered in a portal because WhatsAppLink also lives inside the header and
+// footer, whose link styles would otherwise apply to the city options.
+function CityCheckDialog({ messageKey, eventLabel, onClose }) {
+  const dialogRef = useRef(null);
+  const [isOutsideArea, setIsOutsideArea] = useState(false);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog.open) dialog.showModal();
+  }, []);
+
+  const handleCity = (city) => {
+    // GA4's own recommended event name for a lead-generation action, so it
+    // is picked up as a Key Event automatically without manual setup in the
+    // GA4 UI. Only sent here so people outside the area don't count as leads.
+    trackEvent("generate_lead", {
+      event_category: "contato",
+      event_label: eventLabel,
+      city,
+    });
+    onClose();
+  };
+
+  const handleOutsideArea = () => {
+    trackEvent("outside_service_area", {
+      event_category: "contato",
+      event_label: eventLabel,
+    });
+    setIsOutsideArea(true);
+  };
+
+  return createPortal(
+    <dialog
+      ref={dialogRef}
+      className="city-check"
+      aria-labelledby="city-check-title"
+      onClose={onClose}
+      onClick={(event) => {
+        if (event.target === dialogRef.current) onClose();
+      }}
+    >
+      <div className="city-check-content">
+        <button
+          className="city-check-close"
+          type="button"
+          aria-label="Fechar"
+          onClick={onClose}
+        >
+          <X aria-hidden="true" size={20} />
+        </button>
+        {isOutsideArea ? (
+          <>
+            <h2 id="city-check-title">Ainda não atendemos essa cidade</h2>
+            <p>{site.serviceAreaNotice}</p>
+            <button
+              className="secondary-button"
+              type="button"
+              onClick={() => setIsOutsideArea(false)}
+            >
+              Ver as cidades atendidas
+            </button>
+          </>
+        ) : (
+          <>
+            <h2 id="city-check-title">Onde será o atendimento?</h2>
+            <p>Escolha a cidade onde o paciente está.</p>
+            <div className="city-check-options">
+              {cities.map((city) => (
+                <a
+                  key={city}
+                  href={buildWhatsAppHref(messageKey, city)}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => handleCity(city)}
+                >
+                  {city}
+                </a>
+              ))}
+            </div>
+            <button
+              className="secondary-button"
+              type="button"
+              onClick={handleOutsideArea}
+            >
+              Outra cidade
+            </button>
+          </>
+        )}
+      </div>
+    </dialog>,
+    document.body,
+  );
+}
+
+function trackEvent(name, params) {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", name, params);
+  }
 }
 
 function JsonLd({ data }) {
@@ -1021,9 +1127,9 @@ function upsertLink(rel, href) {
   tag.setAttribute("href", href);
 }
 
-function buildWhatsAppHref(messageKey = "default") {
+function buildWhatsAppHref(messageKey = "default", city = "") {
   const message = whatsappMessages[messageKey] || whatsappMessages.default;
-  const text = `${message} ${site.whatsappCityPrompt}`;
+  const text = `${message} ${site.whatsappCityPrompt}${city}`;
   return `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(text)}`;
 }
 
