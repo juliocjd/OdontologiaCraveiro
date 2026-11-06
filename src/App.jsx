@@ -630,7 +630,7 @@ function AboutPage({ page }) {
           sizes="(max-width: 820px) 100vw, 320px"
           width="360"
           height="360"
-          alt="Dra. Patrícia Craveiro, responsável técnica da Odonto em Casa"
+          alt="Logo da Dra. Patrícia Craveiro, odontologia domiciliar e hospitalar"
           loading="lazy"
           decoding="async"
         />
@@ -655,6 +655,56 @@ function AboutPage({ page }) {
           </p>
         </div>
       </div>
+      <div className="topic-layout">
+        <section className="topic-panel">
+          <h2>Como o atendimento funciona</h2>
+          <InfoList
+            items={[
+              "Conversa inicial pelo WhatsApp, para entender a cidade, a queixa e a condição do paciente.",
+              "Avaliação presencial na casa, no hospital ou na instituição, conforme o caso.",
+              "Explicação à família do que pode ser feito no local e do que precisa de outra estrutura.",
+              "Encaminhamento para consultório ou hospital quando o atendimento em casa não for seguro.",
+            ]}
+          />
+        </section>
+        <section className="topic-panel">
+          <h2>O que orienta o cuidado</h2>
+          <InfoList
+            items={[
+              "Respeito à rotina, ao conforto e ao tempo de cada paciente.",
+              "Trabalho junto com familiares, cuidadores e equipes que já acompanham o paciente.",
+              "Biossegurança, com barreiras de proteção, organização dos materiais e descarte adequado.",
+              "Clareza sobre os limites técnicos do atendimento fora do consultório.",
+            ]}
+          />
+        </section>
+        <section className="topic-panel">
+          <h2>Quem atendemos</h2>
+          <p>
+            Idosos, pacientes acamados ou hospitalizados, pessoas com dificuldade
+            de locomoção ou com necessidades especiais, crianças e pacientes em{" "}
+            <a className="text-link" href="/dentista-para-paciente-em-home-care/">
+              home care
+            </a>
+            . Veja todos os{" "}
+            <a className="text-link" href="/servicos/">
+              serviços
+            </a>
+            .
+          </p>
+        </section>
+        <section className="topic-panel">
+          <h2>Onde atendemos</h2>
+          <p>
+            O atendimento presencial é feito somente em Maringá e região, no
+            Paraná: {cities.join(", ")}. Veja mais em{" "}
+            <a className="text-link" href="/cidades-atendidas/">
+              cidades atendidas
+            </a>
+            .
+          </p>
+        </section>
+      </div>
     </ContentPage>
   );
 }
@@ -662,18 +712,24 @@ function AboutPage({ page }) {
 function FaqPage({ page }) {
   return (
     <ContentPage page={page}>
-      <div className="faq-list">
-        {faqItems.map((item) => (
-          <details key={item.question}>
-            <summary>
-              {item.question}
-              <ChevronDown aria-hidden="true" size={18} />
-            </summary>
-            <p>{item.answer}</p>
-          </details>
-        ))}
-      </div>
+      <FaqList items={faqItems} />
     </ContentPage>
+  );
+}
+
+function FaqList({ items }) {
+  return (
+    <div className="faq-list">
+      {items.map((item) => (
+        <details key={item.question}>
+          <summary>
+            {item.question}
+            <ChevronDown aria-hidden="true" size={18} />
+          </summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
   );
 }
 
@@ -697,7 +753,25 @@ function ServiceTopicPage({ page, path }) {
           <h2>Avaliação e segurança do caso</h2>
           <p>{detail.safety}</p>
         </section>
+        {detail.sections?.map((section) => (
+          <section className="topic-panel" key={section.title}>
+            <h2>{section.title}</h2>
+            {section.text && <p>{section.text}</p>}
+            {section.items && <InfoList items={section.items} />}
+            {section.note && (
+              <p>
+                <strong>{section.note}</strong>
+              </p>
+            )}
+          </section>
+        ))}
       </div>
+      {detail.faq && (
+        <section className="topic-faq">
+          <h2>{detail.faqTitle}</h2>
+          <FaqList items={detail.faq} />
+        </section>
+      )}
       <RelatedServices currentPath={path} />
       <CtaBand
         title={detail.cta}
