@@ -532,6 +532,66 @@ export const serviceDetailPages = {
     safety:
       "A conduta depende da condição clínica do paciente, colaboração possível, risco de engasgo, medicações e segurança do caso. Não há diagnóstico definitivo sem avaliação presencial.",
     cta: "Envie a situação do paciente pelo WhatsApp para organizar a avaliação.",
+    sections: [
+      {
+        title: "Por que a higiene bucal pesa tanto para quem está acamado",
+        text: "Quem passa a maior parte do tempo na cama costuma ter a boca mais seca, pode engolir com dificuldade e depende de outra pessoa para escovar os dentes. A placa se acumula mais rápido e pode causar dor, feridas e dificuldade para comer. Em pacientes com dificuldade de engolir, a má higiene bucal também está associada a maior risco de pneumonia por aspiração, porque bactérias da boca podem chegar aos pulmões.",
+      },
+      {
+        title: "Como costuma ser uma rotina mais segura",
+        items: [
+          "Antes de começar, eleve a cabeceira ou incline a cabeça do paciente para o lado, conforme a orientação da equipe que o acompanha, para reduzir o risco de engasgo.",
+          "Use escova macia e pouca pasta: o excesso faz espuma e é mais difícil de remover.",
+          "Evite encher a boca de água. Umedeça a escova e retire o excesso de saliva e pasta com gaze umedecida.",
+          "Limpe dentes, gengiva, bochechas e língua com movimentos suaves, mesmo em quem não tem dentes.",
+          "Retire as próteses removíveis, limpe-as fora da boca e siga a orientação recebida sobre usá-las durante o sono.",
+          "Ao final, hidrate os lábios se estiverem ressecados.",
+        ],
+      },
+      {
+        title: "Sinais para avisar o dentista",
+        items: [
+          "Feridas na boca que não cicatrizam em cerca de duas semanas.",
+          "Placas brancas ou vermelhas na língua, nas bochechas ou no céu da boca.",
+          "Sangramento frequente ou mau hálito que não melhora com a higiene.",
+          "Prótese que machuca, dentes moles ou quebrados.",
+          "Recusa alimentar, careta ou agitação na hora de comer ou escovar, que podem indicar dor.",
+        ],
+        note: "Inchaço no rosto ou no pescoço com febre, dificuldade para engolir ou para respirar é urgência: procure atendimento médico imediatamente.",
+      },
+      {
+        title: "O que acontece na visita",
+        text: "A visita começa com uma conversa sobre o histórico de saúde, os medicamentos e a rotina de cuidados. Depois, são examinados dentes, gengiva, língua e próteses. Quando possível, a técnica é demonstrada no próprio paciente, junto de quem faz os cuidados diários. Ajuda deixar separados a lista de medicamentos, as próteses e os materiais de higiene usados hoje.",
+      },
+    ],
+    faqTitle: "Dúvidas sobre higiene bucal de pacientes acamados",
+    faq: [
+      {
+        question: "Paciente com sonda, que não come pela boca, precisa de higiene bucal?",
+        answer:
+          "Sim. Mesmo sem comer pela boca, a placa continua se formando, a boca tende a ficar mais seca e a língua pode acumular resíduos. A forma de fazer a higiene é orientada conforme o caso.",
+      },
+      {
+        question: "Quantas vezes por dia fazer a higiene?",
+        answer:
+          "Como regra geral, ao menos duas vezes ao dia, com atenção especial à limpeza antes de dormir. A frequência ideal para cada paciente é definida na avaliação.",
+      },
+      {
+        question: "Posso usar enxaguante bucal?",
+        answer:
+          "Não por conta própria. Quem tem dificuldade de engolir ou de cuspir pode aspirar o líquido. Produtos como a clorexidina só devem ser usados com indicação profissional.",
+      },
+      {
+        question: "Hastes com esponja substituem a escova?",
+        answer:
+          "Em geral, não. Elas ajudam a umedecer e limpar a mucosa, mas removem a placa dos dentes com menos eficiência que uma escova macia.",
+      },
+      {
+        question: "E se o paciente morder a escova ou não abrir a boca?",
+        answer:
+          "Não force a abertura nem coloque os dedos entre os dentes. Interrompa, tente novamente mais tarde e conte isso na conversa inicial, porque há técnicas e materiais que podem ser orientados conforme o caso.",
+      },
+    ],
   },
   "/protese-dentaria-em-casa/": {
     intro:
@@ -579,6 +639,67 @@ export const serviceDetailPages = {
     safety:
       "Nem toda cárie pode ser tratada em casa. Alguns casos exigem radiografia, isolamento, equipamento específico, consultório ou atendimento hospitalar.",
     cta: "Fale pelo WhatsApp sobre avaliação de cárie ou restauração em casa.",
+    sections: [
+      {
+        title: "Por que a cárie é comum em idosos e pacientes em casa",
+        text: "A saliva ajuda a proteger os dentes, e a idade e vários medicamentos podem deixar a boca mais seca. A retração da gengiva expõe a raiz, que é mais vulnerável. Suplementos e alimentos adoçados ao longo do dia, somados à dificuldade de escovar, aumentam o risco. A cárie pode avançar com pouca dor, principalmente em quem não consegue explicar o que sente.",
+      },
+      {
+        title: "O que pode indicar cárie",
+        items: [
+          "Sensibilidade a doce, frio ou calor.",
+          "Mancha escura ou esbranquiçada, buraco ou comida sempre presa no mesmo lugar.",
+          "Restauração quebrada ou que caiu, ou dente lascado.",
+          "Passar a mastigar só de um lado ou recusar certos alimentos.",
+          "Em quem não consegue explicar: mão no rosto ou irritação ao comer ou escovar.",
+        ],
+      },
+      {
+        title: "O que pode ser viável em casa",
+        items: [
+          "Exame do dente e orientação sobre higiene e alimentação.",
+          "Aplicação de flúor ou de outros produtos para ajudar a controlar a lesão, quando indicados.",
+          "Restauração com instrumentos manuais e material restaurador adequado, técnica usada quando não há a estrutura de um consultório.",
+          "Pequenas restaurações com equipamento portátil, quando o acesso ao dente e o controle da saliva permitirem.",
+        ],
+      },
+      {
+        title: "Quando é preciso outro ambiente",
+        items: [
+          "Suspeita de infecção no nervo do dente, que pode exigir tratamento de canal.",
+          "Inchaço, abscesso ou extração mais complexa.",
+          "Necessidade de exames de imagem que não podem ser feitos no local.",
+          "Paciente que não tolera o atendimento em casa ou que precisa de sedação.",
+        ],
+      },
+      {
+        title: "Como se preparar para a visita",
+        text: "Deixe separados a lista de medicamentos, incluindo anticoagulantes, e os exames recentes. Escolha um lugar bem iluminado, com tomada por perto, onde o paciente possa ficar em uma posição confortável. Não interrompa nenhum medicamento por conta própria antes da consulta.",
+      },
+    ],
+    faqTitle: "Dúvidas sobre cárie e restauração em casa",
+    faq: [
+      {
+        question: "Mancha escura no dente é sempre cárie?",
+        answer:
+          "Não. Manchas também podem vir de alimentos, café, tabaco ou restaurações antigas. Só o exame presencial permite saber a causa.",
+      },
+      {
+        question: "O procedimento dói?",
+        answer:
+          "Depende da extensão da lesão e do tipo de procedimento. A anestesia local pode ser usada quando for indicada e segura para o paciente.",
+      },
+      {
+        question: "A restauração feita em casa dura tanto quanto a do consultório?",
+        answer:
+          "Depende do tamanho da lesão, do material, do controle da saliva e da higiene no dia a dia. Por isso, a durabilidade não pode ser prometida e o acompanhamento é recomendado.",
+      },
+      {
+        question: "A dor parou. Ainda preciso de avaliação?",
+        answer:
+          "Sim. A dor pode diminuir mesmo com o problema avançando, então a melhora não significa que o dente esteja curado.",
+      },
+    ],
   },
   "/tratamento-de-gengiva-em-casa/": {
     intro:
@@ -594,6 +715,68 @@ export const serviceDetailPages = {
     safety:
       "O tratamento depende da avaliação clínica, higiene, colaboração do paciente, extensão do problema e segurança do caso. Quando necessário, pode haver encaminhamento para estrutura complementar.",
     cta: "Agende uma avaliação de gengiva em atendimento domiciliar.",
+    sections: [
+      {
+        title: "Gengivite e periodontite: qual é a diferença",
+        text: "A gengivite é a inflamação causada pela placa acumulada junto à gengiva. Costuma provocar vermelhidão, inchaço e sangramento, e pode regredir com limpeza profissional e melhora da higiene. Sem controle, em algumas pessoas ela evolui para periodontite, que atinge o osso e os tecidos que sustentam o dente e pode levar a dentes moles e à perda de dentes. O dano da periodontite não se reverte por completo, mas a doença pode ser controlada.",
+      },
+      {
+        title: "O que costuma piorar a gengiva de quem recebe cuidados em casa",
+        items: [
+          "Dificuldade de escovar sozinho ou de receber a higiene de outra pessoa.",
+          "Prótese mal adaptada ou que não é bem limpa.",
+          "Boca seca, muitas vezes causada por medicamentos.",
+          "Diabetes sem controle adequado e tabagismo.",
+          "Alguns medicamentos, como certos anticonvulsivantes e remédios para pressão, que podem aumentar o volume da gengiva.",
+        ],
+      },
+      {
+        title: "O que pode ser feito em casa",
+        items: [
+          "Exame da gengiva, dos dentes e das próteses.",
+          "Orientação de técnica e de escovas adaptadas para o paciente e para quem cuida.",
+          "Remoção do tártaro acessível com instrumentos manuais ou portáteis, quando for seguro.",
+          "Acompanhamento periódico, com intervalo definido conforme o caso.",
+        ],
+      },
+      {
+        title: "Quando avisar com mais pressa",
+        items: [
+          "Pus na gengiva, dor ou inchaço que aumentam.",
+          "Dente que ficou mole de repente.",
+          "Feridas que não cicatrizam em cerca de duas semanas.",
+        ],
+        note: "Sangramento que não para, principalmente em quem usa anticoagulante, ou inchaço com febre ou dificuldade para engolir ou respirar exigem atendimento médico imediato.",
+      },
+    ],
+    faqTitle: "Dúvidas sobre gengiva e atendimento em casa",
+    faq: [
+      {
+        question: "Se a gengiva sangra, devo parar de escovar?",
+        answer:
+          "Não. Em geral, o sangramento é sinal de inflamação causada pela placa, e parar de escovar tende a piorar o quadro. Use escova macia, com delicadeza, e agende uma avaliação.",
+      },
+      {
+        question: "Enxaguante bucal resolve?",
+        answer:
+          "Não substitui a remoção da placa pela escovação e pela limpeza profissional. Produtos específicos só devem ser usados com orientação.",
+      },
+      {
+        question: "Uso anticoagulante. Posso ser atendido em casa?",
+        answer:
+          "Pode ser possível, mas é preciso informar antes da visita. Nunca interrompa nem altere o medicamento por conta própria: qualquer ajuste é decidido com o médico responsável.",
+      },
+      {
+        question: "A doença na gengiva tem relação com o diabetes?",
+        answer:
+          "Sim. O diabetes sem controle aumenta o risco e a gravidade das doenças da gengiva, e a inflamação gengival pode dificultar o controle da glicemia. Por isso, é importante informar o diagnóstico.",
+      },
+      {
+        question: "Mau hálito sempre vem da gengiva?",
+        answer:
+          "Nem sempre. Ele também pode vir da língua, de próteses, da boca seca ou de outras condições de saúde. A avaliação ajuda a identificar a origem.",
+      },
+    ],
   },
   "/dentista-para-paciente-com-alzheimer-e-demencia/": {
     intro:
@@ -609,6 +792,69 @@ export const serviceDetailPages = {
     safety:
       "O atendimento depende da colaboração possível, condição clínica, segurança do paciente, presença de responsável e viabilidade técnica. Alguns casos podem exigir estrutura complementar.",
     cta: "Converse pelo WhatsApp sobre atendimento para paciente com Alzheimer ou demência.",
+    sections: [
+      {
+        title: "Como o cuidado muda conforme a doença avança",
+        items: [
+          "Fase inicial: é um bom momento para revisar a boca, tratar o que for necessário e criar uma rotina simples, enquanto a colaboração tende a ser maior.",
+          "Fase intermediária: a pessoa pode esquecer etapas ou precisar de lembretes, e a escovação costuma ser supervisionada, passo a passo.",
+          "Fase avançada: a higiene passa a ser feita pelo cuidador, com foco em conforto, controle da dor e atenção ao risco de engasgo.",
+        ],
+      },
+      {
+        title: "Como a dor pode aparecer quando o paciente não consegue dizer",
+        items: [
+          "Recusa alimentar ou preferência repentina por alimentos pastosos.",
+          "Mão no rosto ou resistência ao toque na boca.",
+          "Tirar a prótese com frequência ou não aceitar mais usá-la.",
+          "Irritação ou agitação sem causa aparente, principalmente ao comer ou escovar.",
+          "Mastigar só de um lado ou mau hálito novo.",
+        ],
+        note: "Esses sinais também podem ter outras causas, por isso vale informar também o médico que acompanha o paciente.",
+      },
+      {
+        title: "Dicas para a escovação do dia a dia",
+        items: [
+          "Mantenha o mesmo horário e o mesmo lugar, escolhendo o período em que a pessoa costuma estar mais tranquila.",
+          "Use frases curtas e uma instrução por vez. Mostrar o movimento ou escovar junto pode ajudar.",
+          "Se a pessoa ainda consegue segurar a escova, coloque sua mão sobre a dela para guiar o movimento.",
+          "Uma escova de cabo mais grosso costuma ser mais fácil de segurar.",
+          "Se houver resistência, pare e tente novamente mais tarde em vez de insistir.",
+        ],
+      },
+      {
+        title: "Como a visita é adaptada",
+        text: "A consulta em casa acontece em um ambiente conhecido, de preferência no horário em que o paciente costuma estar mais calmo e com alguém de confiança ao lado. Cada etapa é explicada de forma simples. Quando necessário, o cuidado é dividido em visitas mais curtas para respeitar a tolerância da pessoa.",
+      },
+    ],
+    faqTitle: "Dúvidas sobre atendimento para pacientes com Alzheimer e demência",
+    faq: [
+      {
+        question: "E se o paciente recusar o atendimento?",
+        answer:
+          "A recusa é comum e não significa que o atendimento seja impossível. O paciente não é forçado: busca-se acalmá-lo e tentar novamente. Se a recusa impedir um tratamento necessário, as alternativas são discutidas com a família e o médico.",
+      },
+      {
+        question: "É possível fazer sedação em casa?",
+        answer:
+          "Não. Quando o caso exige sedação, o atendimento precisa ocorrer em um ambiente com estrutura adequada, como o hospitalar, e com a equipe responsável.",
+      },
+      {
+        question: "Quem precisa estar presente na consulta?",
+        answer:
+          "Um familiar ou cuidador que o paciente conheça e o responsável que possa autorizar as decisões sobre o tratamento.",
+      },
+      {
+        question: "O paciente perde ou esconde a prótese. O que fazer?",
+        answer:
+          "Isso é comum. Guarde a prótese sempre no mesmo lugar, confira onde ela está ao fim do dia e, em instituições, peça que seja identificada. Prótese frouxa precisa de avaliação, porque pode machucar e, em alguns casos, oferecer risco de engasgo.",
+      },
+      {
+        question: "E se o paciente engolir a pasta de dente?",
+        answer:
+          "Usar pouca pasta reduz a quantidade engolida. Se a pessoa já não consegue cuspir, converse na avaliação sobre o tipo de pasta e a técnica mais adequados.",
+      },
+    ],
     messageKey: "idosos",
   },
 };

@@ -452,6 +452,11 @@ details {
   text-underline-offset: 3px;
 }
 
+.topic-faq {
+  display: grid;
+  gap: 14px;
+}
+
 .related-services {
   margin-top: 28px;
 }
